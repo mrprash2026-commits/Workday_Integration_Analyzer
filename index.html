@@ -1,0 +1,956 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Workday Integration Analyzer - WIA</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1d2433;--muted:#6b7385;--line:#e2e5ec;--accent:#1f4e78;--accent2:#2e86c1}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0f1420;--card:#171e2e;--ink:#e6e9f2;--muted:#9aa3b8;--line:#2a3349;--accent:#5aa7e0;--accent2:#3b8fd0}}
+:root[data-theme="dark"]{--bg:#0f1420;--card:#171e2e;--ink:#e6e9f2;--muted:#9aa3b8;--line:#2a3349;--accent:#5aa7e0;--accent2:#3b8fd0}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);font-size:15px}
+header{background:var(--accent);color:#fff;padding:18px 24px;padding-top:calc(18px + env(safe-area-inset-top,0px))}
+header h1{margin:0;font-size:20px}header p{margin:4px 0 0;opacity:.85;font-size:13px}
+main{max-width:1200px;margin:0 auto;padding:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+.drop{border:2px dashed var(--line);border-radius:10px;padding:34px;text-align:center;color:var(--muted);cursor:pointer}
+.drop.over{border-color:var(--accent2);color:var(--ink)}
+.drop input{display:none}
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+select,button{font:inherit;padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+.kpi .v{font-size:22px;font-weight:bold}.kpi .l{font-size:12px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:800px){.grid2{grid-template-columns:1fr}}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{color:var(--muted);font-weight:normal}
+h2{font-size:16px;margin:0 0 10px}
+.muted{color:var(--muted);font-size:13px}
+.err{color:#c0392b}
+canvas{max-height:300px}
+.exp{display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:1200px;margin:12px auto 0;padding:0 20px}
+.allmode .tf{display:none}
+.tw{overflow-x:auto}
+.tf{width:100%;max-width:280px;margin:0 0 8px;font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink)}
+.st th{cursor:pointer;user-select:none;color:var(--ink)}
+.st th.asc::after{content:' \25B2';font-size:10px}
+.st th.desc::after{content:' \25BC';font-size:10px}
+.st tr[hidden]{display:none}
+.st tr[data-p="1"]{display:none}
+.pgr{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;font-size:13px}
+.pgr button{font:inherit;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.pgr button:disabled{opacity:.4;cursor:default}
+.pgr select{font:inherit;padding:4px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+@media print{.noprint,.tabs,#pAnalyze,#pMatch,.drop,header p{display:none!important}body{background:#fff;color:#000}header{padding:8px 16px}.card{break-inside:avoid;border-color:#ccc}}
+.tabs{display:flex;gap:8px;max-width:1200px;margin:16px auto 0;padding:0 20px}
+.tab{font:inherit;padding:8px 16px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--muted);cursor:pointer}
+.tab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.drop.sm{padding:20px}
+/* ---- 3D theme overrides ---- */
+body{background:radial-gradient(circle at 8% -8%,rgba(46,134,193,.20),transparent 45%),radial-gradient(circle at 100% 0,rgba(39,174,96,.14),transparent 40%),var(--bg);background-attachment:fixed;min-height:100vh}
+header{position:relative;overflow:hidden;background:linear-gradient(135deg,#1f4e78 0%,#2e86c1 55%,#5dade2 100%);border-bottom-left-radius:22px;border-bottom-right-radius:22px;box-shadow:0 14px 30px -12px rgba(31,78,120,.65),inset 0 -2px 0 rgba(255,255,255,.25)}
+header::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);transform:translateX(-100%);animation:shine 5s infinite;pointer-events:none}
+@keyframes shine{to{transform:translateX(100%)}}
+header h1{font-size:24px;letter-spacing:.5px;text-shadow:0 2px 0 rgba(0,0,0,.25),0 8px 20px rgba(0,0,0,.3)}
+.card{position:relative;background:linear-gradient(160deg,var(--card) 0%,var(--bg) 140%);border:1px solid rgba(255,255,255,.45);border-radius:18px;box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 10px 24px -10px rgba(15,20,40,.35),0 26px 50px -26px rgba(15,20,40,.45);transition:transform .25s ease,box-shadow .25s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 18px 36px -12px rgba(15,20,40,.45),0 40px 70px -30px rgba(15,20,40,.55)}
+.card h2{display:inline-block;border-left:4px solid var(--accent2);padding-left:10px;margin-bottom:12px}
+.kpi .v{font-size:26px;background:linear-gradient(90deg,var(--accent),#27ae60);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tab{border-radius:12px;padding:10px 18px;background:linear-gradient(180deg,var(--card),var(--bg));border:1px solid var(--line);box-shadow:0 4px 0 var(--line),0 10px 18px -8px rgba(0,0,0,.35);transition:transform .12s,box-shadow .12s;font-weight:bold}
+.tab:hover{transform:translateY(-1px)}
+.tab:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.tab.on{background:linear-gradient(180deg,var(--accent2),var(--accent));color:#fff;border-color:transparent;box-shadow:0 4px 0 #15365a,0 12px 24px -8px rgba(31,78,120,.7)}
+button:not(.tab):not(.pv){border-radius:10px;background:linear-gradient(180deg,var(--accent2),var(--accent));color:#fff;border:none;box-shadow:0 4px 0 #15365a,0 8px 16px -6px rgba(31,78,120,.6);cursor:pointer}
+select,input[type=search]{border-radius:10px;box-shadow:inset 0 2px 4px rgba(0,0,0,.08);transition:box-shadow .2s}
+select:focus,input:focus{outline:none;box-shadow:0 0 0 3px rgba(46,134,193,.35)}
+.drop{border:2px dashed var(--accent2);border-radius:18px;background:linear-gradient(145deg,rgba(46,134,193,.07),rgba(39,174,96,.05));transition:transform .2s,box-shadow .2s}
+.drop:hover,.drop.over{transform:translateY(-2px);box-shadow:0 14px 26px -12px rgba(46,134,193,.55)}
+.st th{background:linear-gradient(180deg,var(--card),var(--bg));position:sticky;top:0;z-index:1;box-shadow:0 2px 0 var(--line)}
+.st tbody tr:nth-child(even) td{background:rgba(46,134,193,.04)}
+.st tbody tr:hover td{background:rgba(46,134,193,.12)}
+.pgr button{border-radius:10px;box-shadow:0 3px 0 var(--line),0 6px 12px -6px rgba(0,0,0,.3)}
+.pgr button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.tf{box-shadow:inset 0 2px 4px rgba(0,0,0,.08)}
+@media print{.card,.tab,header,.drop{box-shadow:none!important;transform:none!important}header{background:#1f4e78!important}header::after{display:none}}
+</style></head><body>
+<header><h1>Workday Integration Analyzer - WIA</h1><p>Upload a spreadsheet or CSV. Analysis runs in your browser; your file is not uploaded anywhere.</p></header>
+<nav class="tabs"><button id="tA" class="tab on">Analyze</button><button id="tC" class="tab">Compare two files</button><button id="tM" class="tab">Match by fields</button><button id="tT" class="tab">Three Files Comparison</button><button id="tD" class="tab">View data</button></nav>
+<div class="exp noprint"><button id="exL" class="tab">Export Excel</button><button id="exP" class="tab">Export PDF</button><span id="expMsg" class="muted"></span></div>
+<main>
+<div id="pAnalyze">
+<div class="card"><div id="drop" class="drop">Drop an .xlsx, .xls, .csv or .txt file here, or <u>click to choose</u></div><input id="file" type="file" accept=".xlsx,.xls,.csv,.txt" hidden><p id="status" class="muted"></p></div>
+<div id="app" hidden>
+<div class="card controls">
+<label>Sheet<select id="sheet"></select></label>
+<label>Primary metric<select id="metric"></select></label>
+<label>Group by<select id="group"></select></label>
+<label>Date column<select id="date"></select></label>
+<label>Period<select id="freq"><option value="M">Monthly</option><option value="Q">Quarterly</option><option value="Y">Yearly</option></select></label>
+</div>
+<div class="kpis" id="kpis"></div>
+<div class="card"><h2>Key insights</h2><ul id="insights" style="margin:0;padding-left:20px;line-height:1.6"></ul></div>
+<div class="grid2">
+<div class="card"><h2 id="groupTitle">By group</h2><canvas id="groupChart"></canvas></div>
+<div class="card"><h2>Trend</h2><canvas id="trendChart"></canvas></div>
+</div>
+<div class="grid2"><div class="card"><h2 id="histTitle">Distribution</h2><canvas id="histChart"></canvas></div><div class="card"><h2 id="shareTitle">Share by group</h2><canvas id="shareChart"></canvas></div></div>
+<div class="card"><h2>Pareto: groups ranked, with cumulative share</h2><canvas id="paretoChart"></canvas></div>
+<div class="card"><h2>Numeric statistics</h2><div class="wrap" id="stats"></div></div>
+<div class="grid2">
+<div class="card"><h2>Group summary</h2><div class="wrap" id="groupTable"></div></div>
+<div class="card"><h2>Correlations</h2><div class="wrap" id="corr"></div></div>
+</div>
+<div class="grid2">
+<div class="card"><h2>Top 10 rows</h2><div class="wrap" id="top"></div></div>
+<div class="card"><h2>Outliers (1.5×IQR)</h2><div class="wrap" id="outliers"></div></div>
+</div>
+<div class="card"><h2>Data quality</h2><div id="quality" class="muted"></div></div>
+</div>
+</div>
+<section id="pCompare" hidden>
+<div class="card noprint"><h2>Upload two files</h2>
+<div class="grid2">
+<div><label>File A (baseline)</label><div id="dropA" class="drop sm">Drop file A or <u>click to choose</u></div><input id="fileA" type="file" accept=".xlsx,.xls,.csv,.txt" hidden><p id="stA" class="muted"></p></div>
+<div><label>File B (comparison)</label><div id="dropB" class="drop sm">Drop file B or <u>click to choose</u></div><input id="fileB" type="file" accept=".xlsx,.xls,.csv,.txt" hidden><p id="stB" class="muted"></p></div>
+</div>
+<div class="controls" style="margin-top:12px"><label>Match rows on key column<select id="keyCol"><option value="">(by row position)</option></select></label><label>Metric to total<select id="cmpMetric"></select></label></div>
+<p class="muted">Both files use their first sheet. Choose a key column such as an ID to match records; otherwise rows are compared in order.</p>
+</div>
+<div id="cmpOut"></div>
+</section>
+<section id="pMatch" hidden>
+<div class="card"><h2>Match by fields</h2>
+<p class="muted" id="matchNote"></p>
+<div class="controls">
+<label>Entity field (e.g. Employee)<select id="mEnt"></select></label>
+<label>Item field (e.g. Wage Type)<select id="mItem"></select></label>
+<label>Date field (optional)<select id="mDate"></select></label>
+<label>Value field (optional)<select id="mVal"></select></label>
+</div></div>
+<div id="mOut"></div>
+</section>
+<section id="pThree" hidden>
+<div class="card"><h2>Upload three files</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+<div><label>File A</label><div id="dT0" class="drop sm">Drop file A or <u>click to choose</u></div><input id="fT0" type="file" accept=".xlsx,.xls,.csv,.txt" hidden><p id="sT0" class="muted"></p></div>
+<div><label>File B</label><div id="dT1" class="drop sm">Drop file B or <u>click to choose</u></div><input id="fT1" type="file" accept=".xlsx,.xls,.csv,.txt" hidden><p id="sT1" class="muted"></p></div>
+<div><label>File C</label><div id="dT2" class="drop sm">Drop file C or <u>click to choose</u></div><input id="fT2" type="file" accept=".xlsx,.xls,.csv,.txt" hidden><p id="sT2" class="muted"></p></div>
+</div>
+<div class="controls" style="margin-top:12px"><label>Match key(s) (Ctrl/Cmd-click to pick several)<select id="keyT" multiple size="4" style="min-width:240px"></select></label></div>
+</div>
+<div id="tOut"></div>
+</section>
+<section id="pData" hidden>
+<div class="card"><h2>View file data</h2><p class="muted">Pick a loaded file. Files are loaded in each tab. Click a heading to sort, and use the filter box to search.</p><label>File<select id="dsSel"></select></label> <label>View<select id="dsMode"><option value="one">One file</option><option value="all">All loaded files side by side</option></select></label> <label>Filter (applies to every table shown)<input id="dsFilter" type="search" placeholder="Type to filter rows" style="min-width:240px"></label></div>
+<div id="dataOut"></div>
+</section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+let wb=null,rows=[],cols=[],charts={},curName='';
+const fmt=(n,d=2)=>typeof n==='number'&&isFinite(n)?n.toLocaleString(undefined,{maximumFractionDigits:d}):(n??'');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const isNum=c=>rows.filter(r=>r[c]!==''&&r[c]!=null).slice(0,200).every(r=>typeof r[c]==='number');
+const isDate=c=>/date|time|month|period/i.test(c)&&rows.slice(0,50).every(r=>r[c] instanceof Date||!isNaN(Date.parse(r[c])));
+
+const drop=$('drop');
+drop.onclick=()=>$('file').click();
+$('file').onchange=e=>load(e.target.files[0]);
+drop.ondragover=e=>{e.preventDefault();drop.classList.add('over')};
+drop.ondragleave=()=>drop.classList.remove('over');
+drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');load(e.dataTransfer.files[0])};
+
+function parseDelimited(text){
+  const lines=text.replace(/\r/g,'').split('\n').filter(l=>l.trim()!=='');
+  if(!lines.length)return[];
+  const first=lines[0];
+  const delim=['\t',',',';','|'].reduce((best,d)=>first.split(d).length>first.split(best).length?d:best,',');
+  if(first.split(delim).length===1)return lines.map(l=>l.trim().split(/\s+/));
+  return lines.map(l=>{
+    const out=[];let cur='',q=false;
+    for(let i=0;i<l.length;i++){
+      const ch=l[i];
+      if(q){if(ch==='"'&&l[i+1]==='"'){cur+='"';i++}else if(ch==='"')q=false;else cur+=ch}
+      else if(ch==='"')q=true;
+      else if(ch===delim){out.push(cur);cur=''}
+      else cur+=ch;
+    }
+    out.push(cur);return out;
+  });
+}
+function txtToWorkbook(text){
+  const toCell=v=>{const t=String(v).trim();return t!==''&&!isNaN(Number(t))?Number(t):t};
+  const wbk=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wbk,XLSX.utils.aoa_to_sheet(parseDelimited(text).map(r=>r.map(toCell))),'Text');
+  return wbk;
+}
+async function readWorkbook(file){
+  if(/\.txt$/i.test(file.name))return txtToWorkbook(new TextDecoder().decode(await file.arrayBuffer()));
+  return XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:true});
+}
+
+async function load(file){
+  if(!file)return;
+  $('status').textContent='Reading '+file.name+'…';$('status').className='muted';
+  try{
+    wb=await readWorkbook(file);
+    $('sheet').innerHTML=wb.SheetNames.map(s=>`<option>${esc(s)}</option>`).join('');
+    $('sheet').onchange=loadSheet;
+    loadSheet();
+    curName=file.name;$('status').textContent=file.name+' loaded.';
+    $('app').hidden=false;
+  }catch(err){$('status').textContent='Could not read file: '+err.message;$('status').className='err'}
+}
+
+function loadSheet(){
+  const ws=wb.Sheets[$('sheet').value];
+  const raw=XLSX.utils.sheet_to_json(ws,{defval:'',raw:true});
+  rows=raw.filter(r=>Object.values(r).some(v=>v!==''));
+  rows=rows.map(r=>{const o={};for(const k in r)o[k.trim()]=r[k];return o});
+  cols=rows.length?Object.keys(rows[0]):[];
+  const numCols=cols.filter(isNum), dateCols=cols.filter(isDate);
+  const catCols=cols.filter(c=>!numCols.includes(c)&&!dateCols.includes(c));
+  const pick=(list,re)=>list.find(c=>re.test(c))||list[0]||'';
+  $('metric').innerHTML=numCols.map(c=>`<option>${esc(c)}</option>`).join('');
+  $('metric').value=pick(numCols,/revenue|sales|amount|total|profit|price|cost/i);
+  $('group').innerHTML='<option value="">(none)</option>'+catCols.map(c=>`<option>${esc(c)}</option>`).join('');
+  $('group').value=pick(catCols,/region|category|product|segment|type/i)||'';
+  $('date').innerHTML='<option value="">(none)</option>'+dateCols.map(c=>`<option>${esc(c)}</option>`).join('');
+  $('date').value=dateCols[0]||'';
+  ['metric','group','date','freq'].forEach(id=>$(id).onchange=render);
+  render();
+}
+
+function vals(c){return rows.map(r=>r[c]).filter(v=>typeof v==='number'&&isFinite(v))}
+function quant(a,p){const s=[...a].sort((x,y)=>x-y);const i=(s.length-1)*p,lo=Math.floor(i);return s[lo]+(s[Math.ceil(i)]-s[lo])*(i-lo)}
+function stats(a){const n=a.length,sum=a.reduce((x,y)=>x+y,0),m=sum/n;const sd=Math.sqrt(a.reduce((x,y)=>x+(y-m)**2,0)/Math.max(n-1,1));return{n,sum,mean:m,median:quant(a,.5),sd,min:Math.min(...a),max:Math.max(...a),q1:quant(a,.25),q3:quant(a,.75)}}
+function table(head,body){return `<div class="tw"><input class="tf" type="search" placeholder="Filter rows…" aria-label="Filter rows"><table class="st"><thead><tr>${head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${body.map(r=>`<tr>${r.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
+function corr(x,y){const n=x.length,mx=x.reduce((a,b)=>a+b,0)/n,my=y.reduce((a,b)=>a+b,0)/n;let num=0,dx=0,dy=0;for(let i=0;i<n;i++){num+=(x[i]-mx)*(y[i]-my);dx+=(x[i]-mx)**2;dy+=(y[i]-my)**2}return dx&&dy?num/Math.sqrt(dx*dy):NaN}
+function periodKey(d,f){const t=d instanceof Date?d:new Date(d);if(isNaN(t))return null;const y=t.getFullYear(),m=t.getMonth();if(f==='Y')return String(y);if(f==='Q')return y+'-Q'+(Math.floor(m/3)+1);return y+'-'+String(m+1).padStart(2,'0')}
+
+function render(){
+  const metric=$('metric').value,g=$('group').value,dc=$('date').value,f=$('freq').value;
+  if(!metric){$('kpis').innerHTML='<p class="err">No numeric column found.</p>';return}
+  const a=vals(metric),s=stats(a);
+  const dupes=rows.length-new Set(rows.map(r=>JSON.stringify(r))).size;
+  const missing=cols.reduce((n,c)=>n+rows.filter(r=>r[c]===''||r[c]==null).length,0);
+  $('kpis').innerHTML=[['Rows',fmt(rows.length,0)],['Total '+metric,fmt(s.sum)],['Average',fmt(s.mean)],['Median',fmt(s.median)]]
+    .map(([l,v])=>`<div class="card kpi"><div class="v">${esc(v)}</div><div class="l">${esc(l)}</div></div>`).join('');
+
+  const numCols=cols.filter(c=>vals(c).length>rows.length*.5);
+  $('stats').innerHTML=table(['Column','Count','Mean','Median','Std dev','Min','Max','Q1','Q3'],
+    numCols.map(c=>{const t=stats(vals(c));return [esc(c),t.n,fmt(t.mean),fmt(t.median),fmt(t.sd),fmt(t.min),fmt(t.max),fmt(t.q1),fmt(t.q3)]}));
+
+  if(g){
+    const m={};rows.forEach(r=>{const k=r[g]===''?'(blank)':String(r[g]);(m[k]=m[k]||[]).push(r[metric])});
+    const tot=s.sum;
+    const list=Object.entries(m).map(([k,v])=>{const nums=v.filter(x=>typeof x==='number');const sm=nums.reduce((a,b)=>a+b,0);return{k,count:v.length,sum:sm,avg:nums.length?sm/nums.length:0,share:tot?sm/tot*100:0}}).sort((x,y)=>y.sum-x.sum);
+    $('groupTitle').textContent=`${metric} by ${g}`;
+    $('groupTable').innerHTML=table(['Group','Count','Total','Average','Share %'],list.map(x=>[esc(x.k),x.count,fmt(x.sum),fmt(x.avg),fmt(x.share,1)]));
+    chart('groupChart','bar',list.map(x=>x.k),list.map(x=>x.sum),metric);
+  }else{$('groupTitle').textContent='By group (choose a group column)';$('groupTable').innerHTML='<p class="muted">Choose a group column.</p>';chart('groupChart',null)}
+
+  if(dc){
+    const m={};rows.forEach(r=>{const k=periodKey(r[dc],f);if(!k||typeof r[metric]!=='number')return;m[k]=(m[k]||0)+r[metric]});
+    const keys=Object.keys(m).sort();
+    chart('trendChart','line',keys,keys.map(k=>m[k]),metric);
+  }else chart('trendChart',null);
+
+  const nc=numCols.filter(c=>vals(c).length===rows.length);
+  $('corr').innerHTML=nc.length>1
+    ?table(['',...nc.map(esc)],nc.map(a1=>[`<b>${esc(a1)}</b>`,...nc.map(b=>{const v=corr(rows.map(r=>r[a1]),rows.map(r=>r[b]));return isNaN(v)?'–':fmt(v,2)})]))
+    :'<p class="muted">Needs at least two complete numeric columns.</p>';
+
+  const idx=rows.map((r,i)=>[r[metric],i]).filter(x=>typeof x[0]==='number').sort((x,y)=>y[0]-x[0]).slice(0,10);
+  const show=cols.slice(0,4);
+  $('top').innerHTML=table(['Row',...show],idx.map(([v,i])=>[i+2,...show.map(c=>{const x=rows[i][c];return esc(x instanceof Date?x.toISOString().slice(0,10):fmt(x))})]));
+
+  const q1=quant(a,.25),q3=quant(a,.75),lo=q1-1.5*(q3-q1),hi=q3+1.5*(q3-q1);
+  const out=a.filter(v=>v<lo||v>hi);
+  $('outliers').innerHTML=table(['Lower fence','Upper fence','Outliers','Outlier %'],[[fmt(lo),fmt(hi),out.length,fmt(out.length/a.length*100,1)]])+
+    `<p class="muted">Largest outliers: ${[...out].sort((x,y)=>y-x).slice(0,5).map(v=>fmt(v)).join(', ')||'none'}</p>`;
+
+  renderInsights(metric,g,dc,f,a,s,dupes,missing);
+  drawExtra(metric,g,a);
+  $('quality').textContent=`Duplicate rows: ${dupes}. Blank cells: ${missing}. Primary metric: ${metric}. Outliers are flagged for review, not removed.`;
+}
+
+function drawExtra(metric,g,a){
+  const acc=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#1f4e78';
+  const mk=(id,cfg)=>{if(charts[id]){charts[id].destroy();delete charts[id]}const el=$(id);if(el)charts[id]=new Chart(el,cfg)};
+  $('histTitle').textContent='Distribution of '+metric;
+  if(a.length){
+    const bins=10,mn=Math.min(...a),mx=Math.max(...a),w=(mx-mn)/bins||1;
+    const counts=Array(bins).fill(0);
+    a.forEach(v=>{let i=Math.floor((v-mn)/w);if(i>=bins)i=bins-1;counts[i]++});
+    const labels=counts.map((_,i)=>fmt(mn+i*w,0)+' to '+fmt(mn+(i+1)*w,0));
+    mk('histChart',{type:'bar',data:{labels,datasets:[{label:'Rows',data:counts,backgroundColor:acc}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'Rows'}}}}});
+  }
+  if(!g){
+    $('shareTitle').textContent='Share by group (choose a group column)';
+    ['shareChart','paretoChart'].forEach(id=>{if(charts[id]){charts[id].destroy();delete charts[id]}});
+    return;
+  }
+  $('shareTitle').textContent='Share of '+metric+' by '+g;
+  const m={};
+  rows.forEach(r=>{const k=r[g]===''?'(blank)':String(r[g]);const v=r[metric];if(typeof v==='number')m[k]=(m[k]||0)+v});
+  const L=Object.entries(m).sort((x,y)=>y[1]-x[1]);
+  const tot=L.reduce((t,x)=>t+x[1],0);
+  const pal=['#1f4e78','#2e86c1','#5dade2','#27ae60','#f39c12','#e67e22','#c0392b','#8e44ad','#16a085','#7f8c8d'];
+  const top=L.slice(0,8),rest=L.slice(8).reduce((t,x)=>t+x[1],0);
+  const sl=top.map(x=>x[0]),sv=top.map(x=>x[1]);
+  if(rest>0){sl.push('Other');sv.push(rest)}
+  mk('shareChart',{type:'doughnut',data:{labels:sl,datasets:[{data:sv,backgroundColor:pal}]},options:{plugins:{legend:{position:'right'}}}});
+  const P=L.slice(0,15);let cum=0;
+  const cumPct=P.map(x=>{cum+=x[1];return tot?cum/tot*100:0});
+  mk('paretoChart',{type:'bar',data:{labels:P.map(x=>x[0]),datasets:[{type:'bar',label:metric,data:P.map(x=>x[1]),backgroundColor:acc,yAxisID:'y'},{type:'line',label:'Cumulative %',data:cumPct,borderColor:'#e67e22',backgroundColor:'#e67e22',yAxisID:'y1',tension:.2}]},options:{scales:{y:{beginAtZero:true,position:'left'},y1:{beginAtZero:true,max:100,position:'right',grid:{drawOnChartArea:false}}}}});
+}
+
+function renderInsights(metric,g,dc,f,a,s,dupes,missing){
+  const out=[];
+  if(g){
+    const m={};rows.forEach(r=>{const k=r[g]===''?'(blank)':String(r[g]);const v=r[metric];if(typeof v==='number')m[k]=(m[k]||0)+v});
+    const L=Object.entries(m).sort((x,y)=>y[1]-x[1]);
+    if(L.length&&s.sum){
+      out.push(`${L[0][0]} leads ${metric} by ${g} with ${fmt(L[0][1]/s.sum*100,1)}% of the total.`);
+      if(L.length>1){const lw=L[L.length-1];out.push(`${lw[0]} contributes the least, at ${fmt(lw[1]/s.sum*100,1)}% of the total.`)}
+      if(L.length>=5){const k=Math.ceil(L.length*.2);const topShare=L.slice(0,k).reduce((x,y)=>x+y[1],0)/s.sum*100;out.push(`The top 20% of ${g} groups account for ${fmt(topShare,1)}% of ${metric}.`)}
+    }
+  }
+  if(dc){
+    const m={};rows.forEach(r=>{const k=periodKey(r[dc],f);const v=r[metric];if(!k||typeof v!=='number')return;m[k]=(m[k]||0)+v});
+    const K=Object.keys(m).sort();
+    if(K.length>=2){
+      const first=m[K[0]],last=m[K[K.length-1]];
+      const pct=first?(last-first)/Math.abs(first)*100:NaN;
+      if(isFinite(pct))out.push(`${metric} moved ${pct>=0?'up':'down'} ${fmt(Math.abs(pct),1)}% from ${K[0]} to ${K[K.length-1]}.`);
+      const peak=K.reduce((x,y)=>m[y]>m[x]?y:x),low=K.reduce((x,y)=>m[y]<m[x]?y:x);
+      out.push(`Peak period: ${peak} (${fmt(m[peak])}). Lowest period: ${low} (${fmt(m[low])}).`);
+    }
+  }
+  const nc=cols.filter(c=>c!==metric&&vals(c).length===rows.length);
+  let strongest=null;
+  nc.forEach(c=>{const v=corr(rows.map(r=>r[metric]),rows.map(r=>r[c]));if(isFinite(v)&&(!strongest||Math.abs(v)>Math.abs(strongest[1])))strongest=[c,v]});
+  if(strongest&&Math.abs(strongest[1])>=.5)out.push(`${strongest[0]} is ${Math.abs(strongest[1])>=.7?'strongly':'moderately'} ${strongest[1]>0?'positively':'negatively'} correlated with ${metric} (r = ${fmt(strongest[1],2)}). This is association, not proof of cause.`);
+  const q1=quant(a,.25),q3=quant(a,.75),lo=q1-1.5*(q3-q1),hi=q3+1.5*(q3-q1),oc=a.filter(v=>v<lo||v>hi).length;
+  if(oc)out.push(`${oc} outlier value(s) in ${metric} (${fmt(oc/a.length*100,1)}%). Verify before relying on totals.`);
+  if(a.length>5&&s.mean>s.median*1.2)out.push(`The mean (${fmt(s.mean)}) is well above the median (${fmt(s.median)}), so a few large values are lifting the average.`);
+  if(dupes)out.push(`${dupes} duplicate row(s) found. Consider removing them before analysis.`);
+  if(missing)out.push(`${missing} blank cell(s) across the sheet.`);
+  $('insights').innerHTML=out.length?out.map(t=>`<li>${esc(t)}</li>`).join(''):'<li class="muted">Not enough data to generate insights.</li>';
+}
+
+function chart(id,type,labels,data,label){
+  if(charts[id]){charts[id].destroy();delete charts[id]}
+  if(!type)return;
+  const accent=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#1f4e78';
+  charts[id]=new Chart($(id),{type,data:{labels,datasets:[{label,data,backgroundColor:accent,borderColor:accent,tension:.25,fill:false}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:type==='bar'}}}});
+}
+const D={A:null,B:null};
+const norm=v=>v instanceof Date?v.toISOString().slice(0,10):typeof v==='number'?v:String(v).trim();
+const fmtv=v=>typeof v==='number'?fmt(v):esc(norm(v));
+const isN=(ds,c)=>ds.rows.filter(r=>r[c]!==''&&r[c]!=null).slice(0,300).every(r=>typeof r[c]==='number');
+
+$('tA').onclick=()=>showTab('A');$('tC').onclick=()=>showTab('C');$('tM').onclick=()=>showTab('M');$('tT').onclick=()=>showTab('T');$('tD').onclick=()=>showTab('D');
+function showTab(t){if(t==='M')populateMatch();$('pAnalyze').hidden=t!=='A';$('pCompare').hidden=t!=='C';$('pMatch').hidden=t!=='M';$('pThree').hidden=t!=='T';$('pData').hidden=t!=='D';$('tD').classList.toggle('on',t==='D');if(t==='D')renderData();$('tT').classList.toggle('on',t==='T');$('tA').classList.toggle('on',t==='A');$('tC').classList.toggle('on',t==='C');$('tM').classList.toggle('on',t==='M')}
+
+async function readFile(file){
+  const wbk=await readWorkbook(file);
+  const raw=XLSX.utils.sheet_to_json(wbk.Sheets[wbk.SheetNames[0]],{defval:'',raw:true}).filter(x=>Object.values(x).some(v=>v!==''));
+  const r=raw.map(x=>{const o={};for(const k in x)o[k.trim()]=x[k];return o});
+  return{name:file.name,size:file.size,rows:r,cols:r.length?Object.keys(r[0]):[]};
+}
+function wireDrop(id,inp,side){
+  const d=$(id);
+  d.onclick=()=>$(inp).click();
+  $(inp).onchange=e=>loadCmp(side,e.target.files[0]);
+  d.ondragover=e=>{e.preventDefault();d.classList.add('over')};
+  d.ondragleave=()=>d.classList.remove('over');
+  d.ondrop=e=>{e.preventDefault();d.classList.remove('over');loadCmp(side,e.dataTransfer.files[0])};
+}
+wireDrop('dropA','fileA','A');wireDrop('dropB','fileB','B');
+
+async function loadCmp(side,file){
+  if(!file)return;
+  const st=$('st'+side);st.textContent='Reading…';
+  try{D[side]=await readFile(file);st.textContent=`${file.name}: ${D[side].rows.length} rows, ${D[side].cols.length} columns`;populateKeys()}
+  catch(e){D[side]=null;st.textContent='Could not read file: '+e.message}
+}
+
+function populateKeys(){
+  if(!D.A||!D.B)return;
+  const common=D.A.cols.filter(c=>D.B.cols.includes(c));
+  const kp=$('keyCol'),mp=$('cmpMetric');
+  kp.innerHTML='<option value="">(by row position)</option>'+common.map(c=>`<option>${esc(c)}</option>`).join('');
+  const nums=common.filter(c=>isN(D.A,c)&&isN(D.B,c));
+  mp.innerHTML=nums.map(c=>`<option>${esc(c)}</option>`).join('');
+  const pm=nums.find(c=>/revenue|sales|amount|total|profit|price|cost/i.test(c));if(pm)mp.value=pm;
+  const idc=common.find(c=>/(^id$|_id$| id$|^sku$|code$)/i.test(c));if(idc)kp.value=idc;
+  kp.onchange=compare;mp.onchange=compare;
+  compare();
+}
+
+function buildReport(A,B,key,pairs,diffs,colChanged,unA,unB,onlyA,onlyB,common){
+  const n=pairs.length;
+  const changed=new Map();
+  diffs.forEach(d=>{if(!changed.has(d.k))changed.set(d.k,[]);changed.get(d.k).push(d)});
+  const rc={identical:n-changed.size,changed:changed.size,onlyA:unA.length,onlyB:unB.length};
+  const cols=common.filter(c=>c!==key);
+  const colMis=onlyA.length+onlyB.length+cols.filter(c=>colChanged[c]).length;
+  const fieldRows=[
+    ...onlyA.map(c=>[esc(c),esc('Only in '+A.name),'\u2013','\u2013',esc('Missing from '+B.name)]),
+    ...onlyB.map(c=>[esc(c),esc('Only in '+B.name),'\u2013','\u2013',esc('Missing from '+A.name)]),
+    ...cols.map(c=>{const cnt=colChanged[c]||0;const ex=diffs.find(d=>d.c===c);return[esc(c),cnt?'Content differs':'Identical',cnt,n?fmt(cnt/n*100,1)+'%':'\u2013',ex?`${fmtv(ex.x)} \u2192 ${fmtv(ex.y)} (row ${esc(ex.k)})`:'\u2013']})
+  ];
+  const rowRows=[
+    ...unA.slice(0,100).map(k=>[esc(k),esc('Only in '+A.name),'\u2013',esc('Record not found in '+B.name)]),
+    ...unB.slice(0,100).map(k=>[esc(k),esc('Only in '+B.name),'\u2013',esc('Record not found in '+A.name)]),
+    ...[...changed.entries()].slice(0,100).map(([k,ds])=>[esc(k),'Changed',ds.length,ds.slice(0,5).map(d=>`${esc(d.c)}: ${fmtv(d.x)} \u2192 ${fmtv(d.y)}`).join('<br>')+(ds.length>5?`<br>+${ds.length-5} more`:'')])
+  ];
+  const colPairs=cols.filter(c=>colChanged[c]).map(c=>[c,colChanged[c]]);
+  const kpis=[['Rows in '+A.name,fmt(A.rows.length,0)],['Rows in '+B.name,fmt(B.rows.length,0)],['Identical rows',fmt(rc.identical,0)],['Changed rows',fmt(rc.changed,0)],['Only in A',fmt(rc.onlyA,0)],['Only in B',fmt(rc.onlyB,0)],['Differing cells',fmt(diffs.length,0)],['Field mismatches',fmt(colMis,0)],['File size (A / B)',fileSizeStr(A.size)+' / '+fileSizeStr(B.size)]];
+  const html=`<div class="card"><h2>Comparison report</h2><p class="muted">${esc(A.name)} vs ${esc(B.name)} \u00b7 generated ${esc(new Date().toLocaleString())} \u00b7 <button id="printBtn" class="tab noprint">Print / Save as PDF</button></p><div class="kpis">${kpis.map(([l,v])=>`<div class="card kpi"><div class="v">${v}</div><div class="l">${esc(l)}</div></div>`).join('')}</div></div>`+
+    `<div class="grid2"><div class="card"><h2>Rows by status</h2><canvas id="rptRows"></canvas></div><div class="card"><h2>Differing cells by column</h2>${colPairs.length?'<canvas id="rptCols"></canvas>':'<p class="muted">No differing cells.</p>'}</div></div>`+
+    `<div class="card"><h2>Field mismatches</h2><div class="wrap">${table(['Column','Status','Differing cells','% of matched rows','Example'],fieldRows)}</div></div>`+
+    `<div class="card"><h2>Row and content mismatches</h2><div class="wrap">${rowRows.length?table(['Row / key','Status','Columns changed','Content mismatch'],rowRows):'<p class="muted">No row mismatches.</p>'}</div></div>`;
+  return{html,rc,colLabels:colPairs.map(x=>x[0]),colData:colPairs.map(x=>x[1])};
+}
+
+function drawReport(rep){
+  const acc=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#1f4e78';
+  const mk=(id,cfg)=>{if(charts[id]){charts[id].destroy();delete charts[id]}const el=$(id);if(el)charts[id]=new Chart(el,cfg)};
+  const rc=rep.rc;
+  mk('rptRows',{type:'doughnut',data:{labels:['Identical','Changed','Only in A','Only in B'],datasets:[{data:[rc.identical,rc.changed,rc.onlyA,rc.onlyB],backgroundColor:['#27ae60','#e67e22','#c0392b','#2e86c1']}]},options:{plugins:{legend:{position:'bottom'}}}});
+  mk('rptCols',{type:'bar',data:{labels:rep.colLabels,datasets:[{label:'Differing cells',data:rep.colData,backgroundColor:acc}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}});
+  const b=$('printBtn');if(b)b.onclick=()=>window.print();
+}
+
+function variationInsights(A,B,key,pairs,diffs,colChanged,unA,unB,common){
+  const n=pairs.length;
+  const perRow=new Map();
+  diffs.forEach(d=>perRow.set(d.k,(perRow.get(d.k)||0)+1));
+  const changedRows=perRow.size,identical=n-changedRows;
+  let one=0,two=0,threePlus=0;
+  perRow.forEach(v=>{if(v===1)one++;else if(v===2)two++;else threePlus++});
+  const T=diffs.length;
+  const numeric=diffs.filter(d=>typeof d.x==='number'&&typeof d.y==='number').length;
+  const blank=diffs.filter(d=>d.x===''||d.y==='').length;
+  const text=T-numeric-blank;
+  const pct=(v,t)=>t?fmt(v/t*100,1)+'%':'\u2013';
+  const colList=common.filter(c=>c!==key&&colChanged[c]).map(c=>[c,colChanged[c]]).sort((a,b)=>b[1]-a[1]);
+  const colsCompared=common.filter(c=>c!==key).length;
+  const typeRows=[['Numeric value changed',fmt(numeric,0),pct(numeric,T)],['Text value changed',fmt(text,0),pct(text,T)],['Blank vs filled value',fmt(blank,0),pct(blank,T)],['Total cell variations',fmt(T,0),T?'100%':'\u2013']];
+  const rowRows=[['Identical rows',fmt(identical,0),pct(identical,n)],['Rows with 1 variation',fmt(one,0),pct(one,n)],['Rows with 2 variations',fmt(two,0),pct(two,n)],['Rows with 3 or more',fmt(threePlus,0),pct(threePlus,n)],['Rows only in A',fmt(unA.length,0),'\u2013'],['Rows only in B',fmt(unB.length,0),'\u2013']];
+  const ins=[];
+  ins.push(`${fmt(changedRows,0)} of ${fmt(n,0)} matched rows (${pct(changedRows,n)}) contain at least one variation; ${fmt(identical,0)} are identical.`);
+  ins.push(`Of the ${fmt(changedRows,0)} rows with variations, ${fmt(one,0)} have exactly one, ${fmt(two,0)} have two, and ${fmt(threePlus,0)} have three or more.`);
+  ins.push(`${fmt(colList.length,0)} of ${fmt(colsCompared,0)} compared column(s) show variations, ${fmt(T,0)} cell variation(s) in total.`);
+  if(colList.length)ins.push(`${colList[0][0]} has the most variations: ${fmt(colList[0][1],0)} (${pct(colList[0][1],n)} of matched rows).`);
+  if(colList.length>1)ins.push(`${colList[colList.length-1][0]} has the fewest: ${fmt(colList[colList.length-1][1],0)}.`);
+  ins.push(`${fmt(numeric,0)} numeric, ${fmt(text,0)} text, and ${fmt(blank,0)} blank-versus-filled variation(s).`);
+  ins.push(`${fmt(unA.length,0)} row(s) exist only in A and ${fmt(unB.length,0)} only in B. These are counted as row differences, not cell variations.`);
+  const colRows=colList.map(([c,v])=>[esc(c),fmt(v,0),pct(v,n)]);
+  return `<div class="card"><h2>Variation counts</h2><ul style="margin:0;padding-left:20px;line-height:1.6">${ins.map(t=>`<li>${esc(t)}</li>`).join('')}</ul><div class="grid2" style="margin-top:12px"><div class="wrap">${table(['Variation type','Count','Share'],typeRows)}<div style="height:10px"></div>${table(['Row status','Rows','Share'],rowRows)}</div><div class="wrap">${colRows.length?table(['Column','Variations','% of matched rows'],colRows):'<p class="muted">No column variations.</p>'}</div></div></div>`;
+}
+
+function variationHeatmap(key,pairs,diffs,common){
+  const cols=common.filter(c=>c!==key);
+  if(!diffs.length)return '<div class="card"><h2>Variation heatmap</h2><p class="muted">No variations to show.</p></div>';
+  const byRow=new Map();
+  diffs.forEach(d=>{if(!byRow.has(d.k))byRow.set(d.k,{});byRow.get(d.k)[d.c]=d});
+  const rowsSorted=[...byRow.entries()].sort((a,b)=>Object.keys(b[1]).length-Object.keys(a[1]).length).slice(0,60);
+  const numAbs=diffs.filter(d=>typeof d.x==='number'&&typeof d.y==='number').map(d=>Math.abs(d.y-d.x));
+  const maxN=numAbs.length?Math.max(...numAbs):0;
+  const strength=d=>(typeof d.x==='number'&&typeof d.y==='number'&&maxN)?0.3+0.7*Math.min(1,Math.abs(d.y-d.x)/maxN):1;
+  const cell=(c,ds)=>{
+    const d=ds[c];
+    if(!d)return '<td style="text-align:center;color:var(--muted)">\u00b7</td>';
+    return `<td title="${esc(`${c}: ${norm(d.x)} \u2192 ${norm(d.y)}`)}" style="text-align:center;background:rgba(192,57,43,${strength(d).toFixed(2)});color:#fff">\u25cf</td>`;
+  };
+  const head=cols.map(c=>`<th style="font-size:12px;white-space:nowrap">${esc(c)}</th>`).join('');
+  const body=rowsSorted.map(([k,ds])=>`<tr><th style="text-align:left">${esc(k)}</th>${cols.map(c=>cell(c,ds)).join('')}</tr>`).join('');
+  return `<div class="card"><h2>Variation heatmap</h2><p class="muted">Each row is a matched record and each column is a compared field. A filled red cell is a variation; darker red means a larger numeric difference. Hover a cell to see the values. \u00b7 means no variation. Showing ${rowsSorted.length} of ${byRow.size} rows with variations.</p><div class="tw"><input class="tf" type="search" placeholder="Filter rows…" aria-label="Filter rows"><table class="st"><thead><tr><th>${esc(key)}</th>${head}</tr></thead><tbody>${body}</tbody></table></div></div>`;
+}
+
+function fileSizeStr(b){if(b==null||isNaN(b))return '\u2013';if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(2)+' MB'}
+
+function sizeCard(A,B){
+  const sa=A.size||0,sb=B.size||0,d=sb-sa,minS=Math.min(sa,sb),p=minS?Math.abs(d)/minS*100:NaN;
+  const cells=ds=>ds.rows.length*ds.cols.length;
+  const perRow=ds=>ds.rows.length?fmt((ds.size||0)/ds.rows.length,1)+' B':'\u2013';
+  const rowsT=[
+    ['File size',fileSizeStr(sa),fileSizeStr(sb),(d>=0?'+':'-')+fileSizeStr(Math.abs(d))],
+    ['Rows',fmt(A.rows.length,0),fmt(B.rows.length,0),fmt(B.rows.length-A.rows.length,0)],
+    ['Columns',fmt(A.cols.length,0),fmt(B.cols.length,0),fmt(B.cols.length-A.cols.length,0)],
+    ['Cells (rows \u00d7 columns)',fmt(cells(A),0),fmt(cells(B),0),fmt(cells(B)-cells(A),0)],
+    ['Bytes per row',perRow(A),perRow(B),'\u2013']
+  ];
+  let msg=sa===sb?'Both files are the same size.':`${esc(sb>sa?B.name:A.name)} is larger by ${fileSizeStr(Math.abs(d))}${isFinite(p)?` (${fmt(p,1)}% more than the smaller file)`:''}.`;
+  const extA=A.name.split('.').pop().toLowerCase(),extB=B.name.split('.').pop().toLowerCase();
+  let note='A size difference does not by itself mean the data differs. Excel formatting, styles, and hidden content can change file size without changing values, so use the row and cell results for content changes.';
+  if(extA!==extB)note+=` The files use different formats (.${esc(extA)} and .${esc(extB)}), so size differences mostly reflect the format.`;
+  return `<div class="card"><h2>File size comparison</h2><p>${msg}</p><p class="muted">${note}</p><div class="grid2"><div class="wrap">${table(['Measure',esc(A.name),esc(B.name),'Difference'],rowsT)}</div><div><canvas id="sizeChart"></canvas></div></div></div>`;
+}
+
+function drawSize(A,B){
+  if(charts.sizeChart){charts.sizeChart.destroy();delete charts.sizeChart}
+  const el=$('sizeChart');if(!el)return;
+  const accent=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#1f4e78';
+  charts.sizeChart=new Chart(el,{type:'bar',data:{labels:[A.name,B.name],datasets:[{label:'Bytes',data:[A.size||0,B.size||0],backgroundColor:[accent,'#e67e22']}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'Bytes'}}}}});
+}
+
+document.addEventListener('click',e=>{
+  const th=e.target.closest('table.st th');
+  if(!th)return;
+  const table=th.closest('table'),idx=[...th.parentNode.children].indexOf(th);
+  const asc=th.dataset.dir!=='asc';
+  th.parentNode.querySelectorAll('th').forEach(h=>{h.dataset.dir='';h.classList.remove('asc','desc')});
+  th.dataset.dir=asc?'asc':'desc';th.classList.add(asc?'asc':'desc');
+  const tb=table.tBodies[0];
+  const num=s=>{const t=s.replace(/[,%\s\u2192]/g,'');return t!==''&&!isNaN(t)?Number(t):null};
+  const txt=r=>r.cells[idx]?r.cells[idx].textContent.trim():'';
+  Array.from(tb.rows).sort((a,b)=>{
+    const x=txt(a),y=txt(b),nx=num(x),ny=num(y);
+    const r=(nx!==null&&ny!==null)?nx-ny:x.localeCompare(y,undefined,{numeric:true});
+    return asc?r:-r;
+  }).forEach(r=>tb.appendChild(r));
+  pageRefresh(table.closest('.tw'));
+});
+document.addEventListener('input',e=>{
+  if(!e.target.classList.contains('tf'))return;
+  const q=e.target.value.trim().toLowerCase();
+  const t=e.target.parentNode.querySelector('table');
+  if(!t)return;
+  Array.from(t.tBodies[0].rows).forEach(r=>{r.hidden=!!q&&!r.textContent.toLowerCase().includes(q)});
+  pageRefresh(t.closest('.tw'));
+});
+
+function dataSources(){
+  const list=[];
+  if(rows.length)list.push({id:'an',label:'Analyze: '+curName,rows,cols});
+  if(D.A)list.push({id:'cA',label:'Compare A: '+D.A.name,rows:D.A.rows,cols:D.A.cols,size:D.A.size});
+  if(D.B)list.push({id:'cB',label:'Compare B: '+D.B.name,rows:D.B.rows,cols:D.B.cols,size:D.B.size});
+  T.forEach((t,i)=>{if(t)list.push({id:'t'+i,label:`Three ${NM[i]}: ${t.name}`,rows:t.rows,cols:t.cols,size:t.size})});
+  return list;
+}
+
+function renderData(){
+  if($('dsMode').value==='all'){renderAll();return}
+  renderDataOne();
+  applyFilter();
+}
+
+function renderDataOne(){
+  const src=dataSources(),sel=$('dsSel'),prev=sel.value;
+  sel.innerHTML=src.map(s=>`<option value="${s.id}">${esc(s.label)}</option>`).join('');
+  if(src.some(s=>s.id===prev))sel.value=prev;
+  const s=src.find(x=>x.id===sel.value)||src[0];
+  if(!s){$('dataOut').innerHTML='<div class="card"><p class="muted">No files loaded yet. Load a file in any tab to view its data here.</p></div>';return}
+  const head=s.cols,shown=s.rows.slice(0,1000);
+  const body=shown.map(r=>head.map(c=>{const v=r[c];return v instanceof Date?esc(v.toISOString().slice(0,10)):esc(v)}));
+  $('dataOut').innerHTML=`<div class="card"><h2>${esc(s.label)}</h2><p class="muted">${fmt(s.rows.length,0)} rows × ${fmt(head.length,0)} columns${s.size!=null?' · '+fileSizeStr(s.size):''}${s.rows.length>1000?' · showing the first 1,000 rows':''}</p>${head.length?table(head,body):'<p class="muted">No columns found.</p>'}</div>`;
+}
+$('dsSel').onchange=renderData;$('dsMode').onchange=renderData;$('dsFilter').oninput=applyFilter;
+
+function renderAll(){
+  const src=dataSources(),out=$('dataOut');
+  if(!src.length){out.innerHTML='<div class="card"><p class="muted">No files loaded yet. Load a file in any tab to view its data here.</p></div>';return}
+  const cards=src.map(s=>{
+    const shown=s.rows.slice(0,500);
+    const body=shown.map(r=>s.cols.map(c=>{const v=r[c];return v instanceof Date?esc(v.toISOString().slice(0,10)):esc(v)}));
+    return `<div class="card"><h2>${esc(s.label)}</h2><p class="muted">${fmt(s.rows.length,0)} rows \u00d7 ${fmt(s.cols.length,0)} columns${s.rows.length>500?' \u00b7 first 500 shown':''}</p>${s.cols.length?table(s.cols,body):''}</div>`;
+  }).join('');
+  out.innerHTML=`<div class="allmode" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">${cards}</div>`;
+  applyFilter();
+}
+
+function applyFilter(){
+  const q=$('dsFilter').value.trim().toLowerCase();
+  document.querySelectorAll('#dataOut table.st tbody').forEach(tb=>Array.from(tb.rows).forEach(r=>{r.hidden=!!q&&!r.textContent.toLowerCase().includes(q)}));
+  document.querySelectorAll('#dataOut .tw').forEach(pageRefresh);
+}
+
+function pageRefresh(tw){
+  if(!tw||!tw.dataset.pg)return;
+  const tb=tw.querySelector('table.st tbody');if(!tb)return;
+  const rs=Array.from(tb.rows);
+  rs.forEach(r=>r.dataset.p='');
+  const vis=rs.filter(r=>!r.hidden);
+  const size=tw.dataset.size==='all'?Math.max(vis.length,1):Number(tw.dataset.size);
+  const pages=Math.max(1,Math.ceil(vis.length/size));
+  const p=Math.min(Number(tw.dataset.page||0),pages-1);
+  tw.dataset.page=p;
+  vis.forEach((r,i)=>{if(i<p*size||i>=(p+1)*size)r.dataset.p='1'});
+  const info=tw.querySelector('.pinfo');
+  if(info)info.textContent=vis.length?`Rows ${fmt(p*size+1,0)}\u2013${fmt(Math.min(vis.length,(p+1)*size),0)} of ${fmt(vis.length,0)}`:'No matching rows';
+  const prev=tw.querySelector('[data-a="prev"]'),next=tw.querySelector('[data-a="next"]');
+  if(prev)prev.disabled=p<=0;
+  if(next)next.disabled=p>=pages-1;
+}
+function initPager(tw){
+  tw.dataset.pg='1';tw.dataset.page='0';tw.dataset.size='25';
+  const bar=document.createElement('div');
+  bar.className='pgr';
+  bar.innerHTML='<button data-a="prev">\u2039 Prev</button><span class="pinfo"></span><button data-a="next">Next \u203a</button><label>Rows per page <select class="psz"><option>25</option><option>50</option><option>100</option><option value="all">All</option></select></label>';
+  tw.appendChild(bar);
+  pageRefresh(tw);
+}
+new MutationObserver(()=>document.querySelectorAll('.tw:not([data-pg])').forEach(initPager)).observe(document.body,{childList:true,subtree:true});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.pgr button');if(!b)return;
+  const tw=b.closest('.tw');
+  tw.dataset.page=Number(tw.dataset.page||0)+(b.dataset.a==='next'?1:-1);
+  pageRefresh(tw);
+});
+document.addEventListener('change',e=>{
+  if(!e.target.classList.contains('psz'))return;
+  const tw=e.target.closest('.tw');
+  tw.dataset.size=e.target.value;tw.dataset.page=0;
+  pageRefresh(tw);
+});
+
+const EXP_TABS=['pAnalyze','pCompare','pMatch','pThree','pData'];
+const EXP_NAMES={pAnalyze:'analyze',pCompare:'compare',pMatch:'match',pThree:'three-files',pData:'view-data'};
+function expMsg(t){$('expMsg').textContent=t}
+function stamp(){return new Date().toISOString().slice(0,16).replace(/[:T]/g,'-')}
+function expTables(){
+  const c=EXP_TABS.map(id=>$(id)).find(el=>el&&!el.hidden);
+  if(!c)return{name:'analytics',tables:[]};
+  const tables=[];
+  c.querySelectorAll('table.st').forEach((t,i)=>{
+    const card=t.closest('.card'),h=card&&card.querySelector('h2');
+    const head=t.tHead?Array.from(t.tHead.rows[0].cells).map(x=>x.textContent.trim()):[];
+    const body=Array.from(t.tBodies[0].rows).filter(r=>!r.hidden).map(r=>Array.from(r.cells).map(x=>x.textContent.trim()));
+    if(head.length)tables.push({title:h?h.textContent.trim():'Table '+(i+1),head,body});
+  });
+  return{name:EXP_NAMES[c.id]||'analytics',tables};
+}
+async function saveFile(filename,data,label){
+  expMsg('Preparing '+label+'\u2026');
+  try{
+    const dl=window.claude&&window.claude.use?await window.claude.use('downloads'):null;
+    if(!dl){expMsg('Downloads are not available in this view. Open the page in claude.ai to export.');return}
+    await dl.save({filename,data});
+    expMsg(label+' exported: '+filename);
+  }catch(e){
+    const c=e&&e.code;
+    expMsg(c==='declined'?'Export cancelled.':c==='rate_limited'?'Please wait a moment, then try again.':c==='too_large'?'The file is too large to save here.':'Export is not available in this view.');
+  }
+}
+async function exportExcel(){
+  const{name,tables}=expTables();
+  if(!tables.length)return expMsg('Nothing to export on this page yet. Load a file first.');
+  const numOf=s=>{const t=s.replace(/[,%\s]/g,'');return t!==''&&!isNaN(t)?Number(t):s};
+  const wb=XLSX.utils.book_new(),used=new Set();
+  tables.forEach((t,i)=>{
+    const base=t.title.replace(/[\[\]\*\?\/\\:]/g,' ').trim().slice(0,28)||'Sheet'+(i+1);
+    let nm=base,k=2;
+    while(used.has(nm))nm=base.slice(0,26)+' '+(k++);
+    used.add(nm);
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([t.head,...t.body.map(r=>r.map(numOf))]),nm);
+  });
+  const data=XLSX.write(wb,{bookType:'xlsx',type:'array'});
+  await saveFile(`${name}-${stamp()}.xlsx`,data,'Excel');
+}
+async function exportPdf(){
+  const{name,tables}=expTables();
+  if(!tables.length)return expMsg('Nothing to export on this page yet. Load a file first.');
+  if(!window.jspdf||!window.jspdf.jsPDF)return expMsg('The PDF library did not load. Check your connection and reload.');
+  const doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'pt',format:'a4'});
+  if(typeof doc.autoTable!=='function')return expMsg('The PDF table plugin did not load. Check your connection and reload.');
+  const H=doc.internal.pageSize.getHeight();
+  doc.setFontSize(14);doc.text('Analytics export: '+name,40,40);
+  doc.setFontSize(9);doc.text(new Date().toLocaleString(),40,54);
+  let y=70;
+  tables.forEach(t=>{
+    if(y>H-90){doc.addPage();y=40}
+    doc.setFontSize(11);doc.text(t.title,40,y);
+    doc.autoTable({startY:y+8,head:[t.head],body:t.body,theme:'grid',margin:{left:40,right:40},styles:{fontSize:7,cellPadding:3},headStyles:{fillColor:[31,78,120]}});
+    y=doc.lastAutoTable.finalY+24;
+  });
+  await saveFile(`${name}-${stamp()}.pdf`,doc.output('arraybuffer'),'PDF');
+}
+$('exL').onclick=exportExcel;
+$('exP').onclick=exportPdf;
+
+const T=[null,null,null];
+const NM=['A','B','C'];
+function tWire(i){const d=$('dT'+i),inp=$('fT'+i);d.onclick=()=>inp.click();inp.onchange=e=>tLoad(i,e.target.files[0]);d.ondragover=e=>{e.preventDefault();d.classList.add('over')};d.ondragleave=()=>d.classList.remove('over');d.ondrop=e=>{e.preventDefault();d.classList.remove('over');tLoad(i,e.dataTransfer.files[0])}}
+tWire(0);tWire(1);tWire(2);
+
+async function tLoad(i,file){
+  if(!file)return;
+  const st=$('sT'+i);st.textContent='Reading\u2026';
+  try{T[i]=await readFile(file);st.textContent=`${file.name}: ${T[i].rows.length} rows`;tPopulate()}
+  catch(e){T[i]=null;st.textContent='Could not read file: '+e.message}
+}
+
+function tPopulate(){
+  const loaded=T.filter(Boolean);
+  if(!loaded.length){$('keyT').innerHTML='';$('tOut').innerHTML='';return}
+  const common=loaded[0].cols.filter(c=>loaded.every(t=>t.cols.includes(c)));
+  const kp=$('keyT');
+  kp.innerHTML=common.map(c=>`<option>${esc(c)}</option>`).join('');
+  const idc=common.find(c=>/(^id$|_id$| id$|^sku$|code$)/i.test(c))||common[0]||'';
+  kp.querySelectorAll('option').forEach(o=>o.selected=o.value===idc);
+  kp.onchange=tRun;
+  tRun();
+}
+
+function tRun(){
+  const out=$('tOut');
+  const have=T.filter(Boolean).length;
+  if(have<3){out.innerHTML=`<div class="card"><p class="muted">Load all three files to run the match (${have} of 3 loaded).</p></div>`;return}
+  const keys=Array.from($('keyT').selectedOptions).map(o=>o.value);
+  const key=keys.join(' + ');
+  if(!key){out.innerHTML='<div class="card"><p class="muted">No key column is selected. Choose at least one column that all three files share.</p></div>';return}
+  const nm=T.map(t=>t.name);
+  const maps=T.map(t=>{const m=new Map();t.rows.forEach(r=>{const k=keys.map(c=>norm(r[c])).join('|');if(!m.has(k))m.set(k,r)});return m});
+  const dupes=T.map((t,i)=>t.rows.length-maps[i].size);
+  const all=new Set();maps.forEach(m=>m.forEach((_,k)=>all.add(k)));
+  const cols=T[0].cols.filter(c=>!keys.includes(c)&&T.every(t=>t.cols.includes(c)));
+  const names=p=>NM.filter((_,i)=>p[i]).join(' and ');
+  const cats={},details=[],diffCounts={};
+  let diffKeys=0;
+  all.forEach(k=>{
+    const p=maps.map(m=>m.has(k));
+    const n=p.filter(Boolean).length;
+    let cat,status;
+    if(n===3){
+      const dc=cols.filter(c=>{const v=maps.map(m=>norm(m.get(k)[c]));return !(v[0]===v[1]&&v[1]===v[2])});
+      if(dc.length){cat='In all three: values differ';status='Differs in: '+dc.join(', ');diffKeys++;dc.forEach(c=>diffCounts[c]=(diffCounts[c]||0)+1)}
+      else{cat='In all three: identical';status='Identical'}
+    }else if(n===2){cat='In '+names(p)+' only';status='Missing from '+NM.filter((_,i)=>!p[i]).join(', ')}
+    else{cat='Only in '+NM[p.indexOf(true)];status='Missing from '+NM.filter((_,i)=>!p[i]).join(', ')}
+    cats[cat]=(cats[cat]||0)+1;
+    details.push({k,p,n,cat,status});
+  });
+  const total=all.size,inAll=(cats['In all three: identical']||0)+(cats['In all three: values differ']||0),partial=total-inAll;
+  const pc=x=>total?fmt(x/total*100,1)+'%':'\u2013';
+  const ins=[];
+  ins.push(`${fmt(total,0)} unique ${key} value(s) across the three files; ${fmt(inAll,0)} (${pc(inAll)}) appear in all three.`);
+  ins.push(`${fmt(partial,0)} (${pc(partial)}) appear in only one or two files.`);
+  NM.forEach((x,i)=>{const gap=details.filter(d=>!d.p[i]).length;if(gap)ins.push(`${nm[i]} (${x}) is missing ${fmt(gap,0)} key(s) that appear in the other files.`)});
+  if(diffKeys)ins.push(`${diffKeys} shared key(s) have differing values in: ${Object.entries(diffCounts).sort((a,b)=>b[1]-a[1]).map(([c,v])=>c+' ('+v+')').join(', ')}.`);
+  else if(inAll)ins.push('All shared keys have identical values in the common columns.');
+  if(dupes.some(d=>d>0))ins.push(`Duplicate ${key} values found (${dupes.map((d,i)=>NM[i]+': '+d).join(', ')}). Only the first row per key was used.`);
+  ins.push(`Files: ${T.map((t,i)=>NM[i]+' = '+esc(t.name)).join('; ')}.`);
+  const catRows=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,v])=>[esc(c),fmt(v,0),pc(v)]);
+  const order=d=>d.n===3&&d.cat==='In all three: identical'?1:0;
+  details.sort((a,b)=>order(a)-order(b)||a.n-b.n);
+  const detRows=details.map(d=>[esc(d.k),...d.p.map(x=>x?'\u2713':'\u2717'),esc(d.status)]);
+  out.innerHTML=
+    `<div class="card"><h2>Summary</h2><ul style="margin:0;padding-left:20px;line-height:1.6">${ins.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>`+
+    `<div class="grid2"><div class="card"><h2>Match categories</h2><div class="wrap">${table(['Category','Keys','Share'],catRows)}</div></div><div class="card"><h2>Chart</h2><canvas id="tChart"></canvas></div></div>`+
+    `<div class="card"><h2>Key-level match (${fmt(details.length,0)} keys)</h2><div class="wrap">${table([esc(key),'A','B','C','Status'],detRows)}</div></div>`;
+  requestAnimationFrame(()=>drawT(cats));
+}
+
+function drawT(cats){
+  const el=$('tChart');if(!el)return;
+  if(charts.tChart){charts.tChart.destroy();delete charts.tChart}
+  const e=Object.entries(cats);
+  charts.tChart=new Chart(el,{type:'doughnut',data:{labels:e.map(x=>x[0]),datasets:[{data:e.map(x=>x[1])}]},options:{plugins:{legend:{position:'bottom'}}}});
+}
+
+function populateMatch(){
+  const note=$('matchNote');
+  if(!D.A||!D.B){note.textContent='Load both files in the Compare tab first.';$('mOut').innerHTML='';return}
+  note.textContent=`${D.A.name} vs ${D.B.name}. Choose the fields that identify each record, then the wage type and date.`;
+  const common=D.A.cols.filter(c=>D.B.cols.includes(c));
+  const nums=common.filter(c=>isN(D.A,c)&&isN(D.B,c));
+  const opt=(arr,blank)=>(blank?'<option value="">(none)</option>':'')+arr.map(c=>`<option>${esc(c)}</option>`).join('');
+  const pick=(arr,re)=>arr.find(c=>re.test(c))||'';
+  $('mEnt').innerHTML=opt(common);$('mEnt').value=pick(common,/employee|emp|staff|person|name|^id$|_id$/i);
+  $('mItem').innerHTML=opt(common);$('mItem').value=pick(common,/wage.?type|pay.?type|earning|component/i);
+  $('mDate').innerHTML=opt(common,true);$('mDate').value=pick(common,/date|month|period/i);
+  $('mVal').innerHTML=opt(nums,true);$('mVal').value=pick(nums,/amount|wage|value|pay|salary/i);
+  ['mEnt','mItem','mDate','mVal'].forEach(id=>$(id).onchange=matchRun);
+  matchRun();
+}
+
+function matchRun(){
+  const A=D.A,B=D.B;
+  if(!A||!B){$('mOut').innerHTML='';return}
+  const E=$('mEnt').value,I=$('mItem').value,Dt=$('mDate').value,V=$('mVal').value;
+  if(!E||!I){$('mOut').innerHTML='<div class="card"><p class="muted">Choose an entity field and an item field.</p></div>';return}
+  const common=A.cols.filter(c=>B.cols.includes(c));
+  const onlyA=A.cols.filter(c=>!B.cols.includes(c)),onlyB=B.cols.filter(c=>!A.cols.includes(c));
+  const ek=r=>norm(r[E]),ik=r=>norm(r[I]),dk=r=>Dt?norm(r[Dt]):'';
+  const full=r=>[ek(r),ik(r),dk(r)].join('|');
+  const val=r=>V&&typeof r[V]==='number'?r[V]:0;
+  const group=(ds,f)=>{const m=new Map();ds.rows.forEach(r=>{const k=f(r);if(!m.has(k))m.set(k,[]);m.get(k).push(r)});return m};
+  const gA=group(A,full),gB=group(B,full);
+  const eiA=new Set(A.rows.map(r=>ek(r)+'|'+ik(r))),eiB=new Set(B.rows.map(r=>ek(r)+'|'+ik(r)));
+  const entA=new Set(A.rows.map(ek)),entB=new Set(B.rows.map(ek));
+
+  const missing=[],extra=[],pairs=[];
+  gA.forEach((rs,k)=>{
+    if(gB.has(k))pairs.push([rs[0],gB.get(k)[0]]);
+    else rs.forEach(r=>missing.push({ent:ek(r),item:ik(r),date:dk(r),val:val(r),dd:!!Dt&&eiB.has(ek(r)+'|'+ik(r))}));
+  });
+  gB.forEach((rs,k)=>{
+    if(!gA.has(k))rs.forEach(r=>extra.push({ent:ek(r),item:ik(r),date:dk(r),val:val(r),dd:!!Dt&&eiA.has(ek(r)+'|'+ik(r))}));
+  });
+  const trulyMissing=missing.filter(x=>!x.dd),ddList=missing.filter(x=>x.dd),trulyExtra=extra.filter(x=>!x.dd);
+
+  const vd=[];
+  pairs.forEach(([ra,rb])=>common.filter(c=>c!==E&&c!==I&&c!==Dt).forEach(c=>{
+    const x=norm(ra[c]),y=norm(rb[c]);
+    if(x!==y)vd.push({ent:ek(ra),item:ik(ra),date:dk(ra),col:c,x,y});
+  }));
+
+  const per=new Map();
+  const P=e=>{if(!per.has(e))per.set(e,{miss:[],extra:[],dd:[],vd:0});return per.get(e)};
+  trulyMissing.forEach(x=>P(x.ent).miss.push(x));
+  trulyExtra.forEach(x=>P(x.ent).extra.push(x));
+  ddList.forEach(x=>P(x.ent).dd.push(x));
+  vd.forEach(x=>P(x.ent).vd++);
+
+  const affected=[...per.entries()].filter(([e,v])=>v.miss.length).sort((a,b)=>b[1].miss.length-a[1].miss.length);
+  const missVal=trulyMissing.reduce((t,x)=>t+x.val,0);
+  const itemCount={};trulyMissing.forEach(x=>itemCount[x.item]=(itemCount[x.item]||0)+1);
+  const topItem=Object.entries(itemCount).sort((a,b)=>b[1]-a[1])[0];
+  const onlyInA=[...entA].filter(e=>!entB.has(e)),onlyInB=[...entB].filter(e=>!entA.has(e));
+  const numDiffs=vd.filter(x=>typeof x.x==='number'&&typeof x.y==='number').map(x=>Math.abs(x.y-x.x));
+
+  const ins=[],add=(l,t)=>ins.push({l,t});
+  add('High',`${affected.length} of ${entA.size} ${E} value(s) have at least one ${I} missing in ${B.name}.`);
+  add('High',`${trulyMissing.length} ${I} record(s) present in ${A.name} are missing in ${B.name}${V?`, worth ${fmt(missVal)} in ${V}`:''}.`);
+  if(affected.length)add('High',`${affected[0][0]} has the most missing ${I} records (${affected[0][1].miss.length}).`);
+  if(topItem)add('High',`"${topItem[0]}" is the most frequently missing ${I} (${topItem[1]} record(s)).`);
+  if(onlyInA.length)add('High',`${onlyInA.length} ${E} value(s) appear only in ${A.name}: ${onlyInA.slice(0,10).join(', ')}.`);
+  if(onlyInB.length)add('Medium',`${onlyInB.length} ${E} value(s) appear only in ${B.name}: ${onlyInB.slice(0,10).join(', ')}.`);
+  if(Dt&&ddList.length)add('Medium',`${ddList.length} record(s) match on ${E} and ${I} but have a different ${Dt}. Check for date errors before treating them as missing.`);
+  if(trulyExtra.length)add('Medium',`${trulyExtra.length} ${I} record(s) in ${B.name} have no counterpart in ${A.name}.`);
+  if(vd.length)add('Medium',`${vd.length} value difference(s) on matched records across ${new Set(vd.map(x=>x.col)).size} column(s)${numDiffs.length?`, largest numeric change ${fmt(Math.max(...numDiffs))}`:''}.`);
+  add('Low',`Common columns: ${common.join(', ')||'none'}.${onlyA.length?` Only in A: ${onlyA.join(', ')}.`:''}${onlyB.length?` Only in B: ${onlyB.join(', ')}.`:''}`);
+  const rank={High:0,Medium:1,Low:2};
+  ins.sort((x,y)=>rank[x.l]-rank[y.l]);
+  const insHtml=`<ul style="margin:0;padding-left:20px;line-height:1.6">${ins.map(i=>`<li><b>${i.l}:</b> ${esc(i.t)}</li>`).join('')}</ul>`;
+
+  const rowsT=[...per.entries()].filter(([e,v])=>v.miss.length||v.extra.length||v.dd.length||v.vd).sort((a,b)=>b[1].miss.length-a[1].miss.length);
+  const empTable=rowsT.length
+    ?table([E,'Missing','Missing '+I+(Dt?' (date)':''),'Date differs','Extra in '+B.name,'Value diffs'],rowsT.slice(0,200).map(([e,v])=>[esc(e),v.miss.length,v.miss.map(x=>esc(x.item)+(Dt&&x.date?' ('+esc(x.date)+')':'')).join('; ')||'–',v.dd.length,v.extra.length,v.vd]))
+    :'<p class="muted">No differences found.</p>';
+  const vdTable=vd.length?table(['Entity','Item','Date','Column','File A','File B'],vd.slice(0,50).map(x=>[esc(x.ent),esc(x.item),esc(x.date),esc(x.col),fmtv(x.x),fmtv(x.y)])):'<p class="muted">No value differences on matched records.</p>';
+
+  $('mOut').innerHTML=
+    `<div class="card"><h2>Key insights</h2>${insHtml}</div>`+
+    `<div class="card"><h2>Missing ${esc(I)} by ${esc(E)}</h2><div class="wrap">${empTable}</div></div>`+
+    `<div class="card"><h2>Value differences on matched records${vd.length>50?' (first 50)':''}</h2><div class="wrap">${vdTable}</div></div>`;
+}
+
+function severityInsights(A,B,key,metric,pairs,diffs,colChanged,unA,unB,onlyA,onlyB,numCommon,sumOf,pct){
+  const items=[];
+  const add=(level,text)=>items.push({level,text});
+  const rank={Critical:0,High:1,Medium:2,Low:3};
+  const n=pairs.length||1;
+  const rowsTotal=(pairs.length+unA.length+unB.length)||1;
+  if(metric){
+    const ta=sumOf(A,metric),tb=sumOf(B,metric),p=Math.abs(pct(ta,tb));
+    if(isFinite(p)&&p>=10)add('Critical',`${metric} total changed by ${fmt(p,1)}% (${fmt(ta)} to ${fmt(tb)}).`);
+    else if(isFinite(p)&&p>=5)add('High',`${metric} total changed by ${fmt(p,1)}%.`);
+    else if(isFinite(p)&&p>=0.5)add('Low',`${metric} total changed by ${fmt(p,1)}%.`);
+  }
+  const missingShare=unA.length/rowsTotal*100,addedShare=unB.length/rowsTotal*100;
+  if(missingShare>=10)add('Critical',`${unA.length} records (${fmt(missingShare,1)}%) exist only in A. Likely cause: records were filtered out or deleted in B, or the key format changed.`);
+  else if(unA.length)add('High',`${unA.length} record(s) exist only in A. Likely cause: filtering or deletion in B.`);
+  if(addedShare>=10)add('High',`${unB.length} records (${fmt(addedShare,1)}%) exist only in B. Likely cause: a new period or customer set, or a broader filter in B.`);
+  else if(unB.length)add('Medium',`${unB.length} record(s) exist only in B. Likely cause: new data added in B.`);
+  if(onlyA.length||onlyB.length)add('High',`Schema change: ${onlyA.length} column(s) only in A, ${onlyB.length} only in B. Likely cause: the export template or column names changed.`);
+  numCommon.forEach(c=>{
+    if(c===metric)return;
+    const a=sumOf(A,c),b=sumOf(B,c),p=Math.abs(pct(a,b));
+    if(isFinite(p)&&p>=25)add('Critical',`${c} total moved ${fmt(p,1)}%.`);
+    else if(isFinite(p)&&p>=10)add('High',`${c} total moved ${fmt(p,1)}%.`);
+  });
+  Object.entries(colChanged).forEach(([c,count])=>{
+    const nd=diffs.filter(d=>d.c===c);
+    const share=count/n*100;
+    const allTiny=nd.every(d=>typeof d.x==='number'&&typeof d.y==='number'&&Math.abs(d.y-d.x)<0.01);
+    if(allTiny){add('Low',`${c}: ${count} cell(s) differ by less than 0.01. Likely cause: rounding or floating-point precision.`);return}
+    let cause='';
+    const ratios=nd.filter(d=>typeof d.x==='number'&&typeof d.y==='number'&&d.x!==0).map(d=>d.y/d.x).sort((p,q)=>p-q);
+    if(ratios.length>=3&&ratios.length===nd.length){
+      const med=ratios[Math.floor(ratios.length/2)];
+      if(Math.abs(med-1)>0.01&&ratios.every(r=>Math.abs(r/med-1)<0.01))cause=` All changes share a factor of about ${fmt(med,3)}, which suggests a unit, currency, or scaling change.`;
+    }
+    const level=share>=50?'High':share>=20?'Medium':'Low';
+    add(level,`${c}: ${count} cell(s) differ (${fmt(share,1)}% of matched rows).${cause}`);
+  });
+  const rowCounts={};
+  diffs.forEach(d=>rowCounts[d.k]=(rowCounts[d.k]||0)+1);
+  const topFive=Object.entries(rowCounts).sort((x,y)=>y[1]-x[1]).slice(0,5);
+  const topShare=diffs.length?topFive.reduce((t,x)=>t+x[1],0)/diffs.length*100:0;
+  if(diffs.length>=10&&topShare>=50)add('Medium',`Changes are concentrated in a few records: the top 5 hold ${fmt(topShare,1)}% of differences. Review those first (${topFive.map(x=>x[0]).join(', ')}).`);
+  items.sort((x,y)=>rank[x.level]-rank[y.level]);
+  const body=items.length?items.map(i=>`<li><b>${i.level}:</b> ${esc(i.text)}</li>`).join(''):'<li class="muted">No significant differences to rank.</li>';
+  return `<div class="card"><h2>Ranked insights</h2><ul style="margin:0;padding-left:20px;line-height:1.6">${body}</ul></div>`;
+}
+
+function compare(){
+  const A=D.A,B=D.B;
+  if(!A||!B){$('cmpOut').innerHTML='';return}
+  const common=A.cols.filter(c=>B.cols.includes(c));
+  const onlyA=A.cols.filter(c=>!B.cols.includes(c)),onlyB=B.cols.filter(c=>!A.cols.includes(c));
+  const numCommon=common.filter(c=>isN(A,c)&&isN(B,c));
+  const key=$('keyCol').value,metric=$('cmpMetric').value;
+  const sumOf=(ds,c)=>ds.rows.reduce((t,r)=>typeof r[c]==='number'?t+r[c]:t,0);
+  const pct=(a,b)=>a?(b-a)/Math.abs(a)*100:NaN;
+
+  let pairs=[],unA=[],unB=[];
+  if(key){
+    const ma=new Map(),mb=new Map();
+    A.rows.forEach(r=>ma.set(norm(r[key]),r));
+    B.rows.forEach(r=>mb.set(norm(r[key]),r));
+    ma.forEach((r,k)=>mb.has(k)?pairs.push([k,r,mb.get(k)]):unA.push(k));
+    mb.forEach((r,k)=>{if(!ma.has(k))unB.push(k)});
+  }else{
+    const n=Math.min(A.rows.length,B.rows.length);
+    for(let i=0;i<n;i++)pairs.push(['Row '+(i+2),A.rows[i],B.rows[i]]);
+    unA=A.rows.slice(n).map((_,i)=>'Row '+(n+i+2));
+    unB=B.rows.slice(n).map((_,i)=>'Row '+(n+i+2));
+  }
+
+  const diffs=[],colChanged={};
+  common.filter(c=>c!==key).forEach(c=>pairs.forEach(([k,ra,rb])=>{
+    const x=norm(ra[c]),y=norm(rb[c]);
+    if(x!==y){diffs.push({k,c,x,y});colChanged[c]=(colChanged[c]||0)+1}
+  }));
+  const mag=d=>typeof d.x==='number'&&typeof d.y==='number'?Math.abs(d.y-d.x):0;
+  diffs.sort((p,q)=>mag(q)-mag(p));
+
+  const out=[];
+  out.push(`${A.name} has ${fmt(A.rows.length,0)} rows; ${B.name} has ${fmt(B.rows.length,0)}.`);
+  if(onlyA.length||onlyB.length)out.push(`Columns only in A: ${onlyA.join(', ')||'none'}. Columns only in B: ${onlyB.join(', ')||'none'}.`);
+  if(metric){
+    const ta=sumOf(A,metric),tb=sumOf(B,metric),p=pct(ta,tb);
+    out.push(`Total ${metric}: ${fmt(ta)} in A vs ${fmt(tb)} in B (change ${fmt(tb-ta)}${isFinite(p)?', '+fmt(p,1)+'%':''}).`);
+  }
+  out.push(key?`Matched on "${key}": ${pairs.length} rows in both, ${unA.length} only in A, ${unB.length} only in B.`:`Compared by row position: ${pairs.length} row pairs.`);
+  out.push(`${diffs.length} differing cell(s) across ${new Set(diffs.map(d=>d.k)).size} of ${pairs.length} matched rows.`);
+  const top=Object.entries(colChanged).sort((x,y)=>y[1]-x[1])[0];
+  if(top)out.push(`Most changed column: ${top[0]} (${top[1]} cells).`);
+  const big=numCommon.map(c=>({c,a:sumOf(A,c),b:sumOf(B,c)})).filter(x=>x.a).map(x=>({...x,p:pct(x.a,x.b)})).filter(x=>isFinite(x.p)).sort((x,y)=>Math.abs(y.p)-Math.abs(x.p))[0];
+  if(big)out.push(`Largest total change among numeric columns: ${big.c}, ${fmt(big.p,1)}%.`);
+  if(!diffs.length&&!unA.length&&!unB.length&&!onlyA.length&&!onlyB.length)out.push('The two files match on structure and values for every compared row.');
+
+  const sev=severityInsights(A,B,key,metric,pairs,diffs,colChanged,unA,unB,onlyA,onlyB,numCommon,sumOf,pct);
+  const rep=buildReport(A,B,key,pairs,diffs,colChanged,unA,unB,onlyA,onlyB,common);
+  requestAnimationFrame(()=>{drawReport(rep);drawSize(A,B)});
+  const totals=numCommon.length?`<div class="card"><h2>Numeric totals</h2><div class="wrap">${table(['Column','Total A','Total B','Change','Change %'],numCommon.map(c=>{const a=sumOf(A,c),b=sumOf(B,c),p=pct(a,b);return[esc(c),fmt(a),fmt(b),fmt(b-a),isFinite(p)?fmt(p,1)+'%':'–']}))}</div></div>`:'';
+  const cellTable=diffs.length?table(['Match','Column','File A','File B'],diffs.slice(0,50).map(d=>[esc(d.k),esc(d.c),fmtv(d.x),fmtv(d.y)])):'<p class="muted">No differing cells.</p>';
+
+  $('cmpOut').innerHTML=
+    sizeCard(A,B)+rep.html+variationInsights(A,B,key,pairs,diffs,colChanged,unA,unB,common)+variationHeatmap(key,pairs,diffs,common)+sev+`<div class="card"><h2>Key differences</h2><ul style="margin:0;padding-left:20px;line-height:1.6">${out.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>`+
+    totals+
+    `<div class="card"><h2>Cell-level differences${diffs.length>50?' (top 50 of '+fmt(diffs.length,0)+', largest first)':''}</h2><div class="wrap">${cellTable}</div></div>`+
+    `<div class="grid2"><div class="card"><h2>Only in A</h2><p class="muted">${unA.slice(0,50).map(esc).join(', ')||'None'}</p></div><div class="card"><h2>Only in B</h2><p class="muted">${unB.slice(0,50).map(esc).join(', ')||'None'}</p></div></div>`;
+}
+</script></body></html>

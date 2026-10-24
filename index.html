@@ -73,13 +73,53 @@ select:focus,input:focus{outline:none;box-shadow:0 0 0 3px rgba(46,134,193,.35)}
 .pgr button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
 .tf{box-shadow:inset 0 2px 4px rgba(0,0,0,.08)}
 @media print{.card,.tab,header,.drop{box-shadow:none!important;transform:none!important}header{background:#1f4e78!important}header::after{display:none}}
+header img#clientLogo{position:absolute;right:24px;top:50%;transform:translateY(-50%);max-height:56px;max-width:180px;object-fit:contain;background:rgba(255,255,255,.95);padding:6px 10px;border-radius:10px;box-shadow:0 6px 14px -6px rgba(0,0,0,.4)}
+@media (max-width:700px){header img#clientLogo{position:static;transform:none;display:block;margin-bottom:8px}}
+.dev{position:fixed;right:14px;top:8px;z-index:50;font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--line);padding:4px 10px;border-radius:999px;box-shadow:0 6px 14px -8px rgba(0,0,0,.35)}
+.clock{margin-left:auto;display:flex;gap:8px;align-items:center;font-size:13px;background:var(--card);border:1px solid var(--line);padding:5px 10px;border-radius:12px;box-shadow:0 6px 14px -8px rgba(0,0,0,.35);font-variant-numeric:tabular-nums}
+.clock select{font:inherit;padding:2px 4px;border:none;background:transparent;color:var(--ink);cursor:pointer}
+.hclock{margin-top:10px;margin-left:0;display:inline-flex;background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.4);box-shadow:0 6px 14px -8px rgba(0,0,0,.45)}
+.hclock select{color:#fff}
+.hclock select option{color:#1d2433}
+header{padding-bottom:52px}
+header .hclock{position:absolute;right:24px;bottom:12px;left:auto;transform:none;margin:0;white-space:nowrap}
+header img#clientLogo{top:42%}
+@media (max-width:700px){header{padding-bottom:18px}header .hclock{position:static;transform:none;margin:10px 0 0;display:inline-flex}}
+.st tr.hdiff td{background:rgba(230,126,34,.22)!important}
+.ycell{background:#ffe866;color:#1d2433;padding:2px 6px;border-radius:4px;display:inline-block;min-width:60px}
+.lmiss{background:#e74c3c;color:#fff;padding:2px 6px;border-radius:4px;display:inline-block;min-width:60px}
+.orbit{position:relative;width:120px;height:120px;margin:0 auto 10px}
+.orbit::before{content:'';position:absolute;inset:14px;border:2px dashed var(--line);border-radius:50%}
+.orbit .core{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));box-shadow:0 6px 14px -4px rgba(31,78,120,.6),inset 0 -3px 0 rgba(0,0,0,.2)}
+.orbit .fl{display:block;position:absolute;left:50%;top:50%;width:20px;height:26px;margin:-13px 0 0 -10px;border:2px solid var(--c);border-radius:3px;background:linear-gradient(135deg,#fff 65%,var(--c) 65%);box-shadow:0 3px 6px -2px rgba(0,0,0,.35);animation:orb 8s linear infinite;animation-delay:calc(var(--i) * -1.333s)}
+@keyframes orb{from{transform:rotate(0deg) translateY(-50px) rotate(0deg)}to{transform:rotate(360deg) translateY(-50px) rotate(-360deg)}}
+@media (prefers-reduced-motion: reduce){.orbit .fl{animation:none}}
+header{padding-left:96px}
+.mag{position:absolute;left:20px;top:50%;width:64px;height:64px;transform:translateY(-50%);animation:magSway 2.6s ease-in-out infinite alternate;pointer-events:none}
+.mag .lens{position:absolute;left:0;top:0;width:44px;height:44px;border-radius:50%;border:6px solid #fff;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.6),rgba(255,255,255,.08) 70%);box-shadow:0 6px 16px -4px rgba(0,0,0,.4),inset 0 0 0 2px rgba(255,255,255,.35);overflow:hidden}
+.mag .handle{position:absolute;left:38px;top:40px;width:28px;height:10px;border-radius:6px;background:linear-gradient(90deg,#fff,#dfe9ff);box-shadow:0 3px 6px -2px rgba(0,0,0,.35);transform:rotate(45deg);transform-origin:0 50%}
+.mag .doc{position:absolute;left:50%;top:50%;width:14px;height:18px;margin:-9px 0 0 -7px;border-radius:2px;background:repeating-linear-gradient(to bottom,#fff 0 3px,#dfe9ff 3px 5px);box-shadow:0 2px 4px rgba(0,0,0,.25);animation:docScan 2.6s ease-in-out infinite}
+@keyframes magSway{from{transform:translateY(-50%) translateX(-4px) rotate(-8deg)}to{transform:translateY(-50%) translateX(6px) rotate(8deg)}}
+@keyframes docScan{0%,100%{transform:translateY(-7px)}50%{transform:translateY(7px)}}
+@media (max-width:700px){header{padding-left:24px}.mag{position:static;transform:none;margin:0 0 8px;animation:none}.mag .lens{width:40px;height:40px}}
+@media (prefers-reduced-motion: reduce){.mag,.mag .doc{animation:none}}
+.wia{background:#27ae60;color:#fff;padding:0 8px;border-radius:6px;box-shadow:0 4px 0 #1e8449;text-shadow:none}
+.docbody{background:#fff;color:#1d2433;padding:24px;border-radius:12px;max-height:70vh;overflow:auto;line-height:1.5}
+.docbody table{border-collapse:collapse}.docbody td,.docbody th{border:1px solid #ccc;padding:4px 6px}
+.card h2{background:linear-gradient(90deg,#2e86c1,#e67e22 40%,#27ae60 70%,#8e44ad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.st thead th:nth-child(6n+1){color:#2e86c1}
+.st thead th:nth-child(6n+2){color:#e67e22}
+.st thead th:nth-child(6n+3){color:#27ae60}
+.st thead th:nth-child(6n+4){color:#8e44ad}
+.st thead th:nth-child(6n+5){color:#c0392b}
+.st thead th:nth-child(6n+6){color:#16a085}
 </style></head><body>
-<header><h1>Workday Integration Analyzer - WIA</h1><p>Upload a spreadsheet or CSV. Analysis runs in your browser; your file is not uploaded anywhere.</p></header>
-<nav class="tabs"><button id="tA" class="tab on">Analyze</button><button id="tC" class="tab">Compare two files</button><button id="tM" class="tab">Match by fields</button><button id="tT" class="tab">Three Files Comparison</button><button id="tD" class="tab">View data</button></nav>
+<header><img id="clientLogo" alt="Client logo" hidden><div class="mag" aria-hidden="true"><div class="lens"><i class="doc"></i></div><span class="handle"></span></div><h1>Workday Integration Analyzer - <mark class="wia">WIA</mark></h1><p>Upload a spreadsheet or CSV. Analysis runs in your browser; your file is not uploaded anywhere.</p><div class="clock hclock"><select id="tzSel" aria-label="Time zone"></select><span id="clockTxt"></span></div></header>
+<nav class="tabs"><button id="tC" class="tab">Compare two files</button><button id="tM" class="tab">Match by fields</button><button id="tD" class="tab">View data</button><button id="tT" class="tab">Three Files Comparison</button><button id="tX" class="tab" hidden>Admin</button><button id="tK" class="tab">Combined trend</button><button id="tA" class="tab on">Analyze</button><button id="tY" class="tab">Data analysis</button><button id="tV" class="tab">Documents</button><button id="tG" class="tab">Merge</button></nav>
 <div class="exp noprint"><button id="exL" class="tab">Export Excel</button><button id="exP" class="tab">Export PDF</button><span id="expMsg" class="muted"></span></div>
 <main>
 <div id="pAnalyze">
-<div class="card"><div id="drop" class="drop">Drop an .xlsx, .xls, .csv or .txt file here, or <u>click to choose</u></div><input id="file" type="file" accept=".xlsx,.xls,.csv,.txt" hidden><p id="status" class="muted"></p></div>
+<div class="card"><div id="drop" class="drop"><div class="orbit" aria-hidden="true"><div class="core"></div><i class="fl" style="--i:0;--c:#2e86c1"></i><i class="fl" style="--i:1;--c:#e67e22"></i><i class="fl" style="--i:2;--c:#27ae60"></i><i class="fl" style="--i:3;--c:#8e44ad"></i><i class="fl" style="--i:4;--c:#c0392b"></i><i class="fl" style="--i:5;--c:#16a085"></i></div>Drop an .xlsx, .xls, .csv, .txt, .pgp or .xml file here, or <u>click to choose</u></div><input id="file" type="file" accept=".xlsx,.xls,.csv,.txt,.pgp,.xml" hidden><p id="status" class="muted"></p></div>
 <div id="app" hidden>
 <div class="card controls">
 <label>Sheet<select id="sheet"></select></label>
@@ -111,8 +151,8 @@ select:focus,input:focus{outline:none;box-shadow:0 0 0 3px rgba(46,134,193,.35)}
 <section id="pCompare" hidden>
 <div class="card noprint"><h2>Upload two files</h2>
 <div class="grid2">
-<div><label>File A (baseline)</label><div id="dropA" class="drop sm">Drop file A or <u>click to choose</u></div><input id="fileA" type="file" accept=".xlsx,.xls,.csv,.txt" hidden><p id="stA" class="muted"></p></div>
-<div><label>File B (comparison)</label><div id="dropB" class="drop sm">Drop file B or <u>click to choose</u></div><input id="fileB" type="file" accept=".xlsx,.xls,.csv,.txt" hidden><p id="stB" class="muted"></p></div>
+<div><label>File A (baseline)</label><div id="dropA" class="drop sm">Drop file A or <u>click to choose</u></div><input id="fileA" type="file" accept=".xlsx,.xls,.csv,.txt,.pgp,.xml" hidden><p id="stA" class="muted"></p></div>
+<div><label>File B (comparison)</label><div id="dropB" class="drop sm">Drop file B or <u>click to choose</u></div><input id="fileB" type="file" accept=".xlsx,.xls,.csv,.txt,.pgp,.xml" hidden><p id="stB" class="muted"></p></div>
 </div>
 <div class="controls" style="margin-top:12px"><label>Match rows on key column<select id="keyCol"><option value="">(by row position)</option></select></label><label>Metric to total<select id="cmpMetric"></select></label></div>
 <p class="muted">Both files use their first sheet. Choose a key column such as an ID to match records; otherwise rows are compared in order.</p>
@@ -133,21 +173,52 @@ select:focus,input:focus{outline:none;box-shadow:0 0 0 3px rgba(46,134,193,.35)}
 <section id="pThree" hidden>
 <div class="card"><h2>Upload three files</h2>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
-<div><label>File A</label><div id="dT0" class="drop sm">Drop file A or <u>click to choose</u></div><input id="fT0" type="file" accept=".xlsx,.xls,.csv,.txt" hidden><p id="sT0" class="muted"></p></div>
-<div><label>File B</label><div id="dT1" class="drop sm">Drop file B or <u>click to choose</u></div><input id="fT1" type="file" accept=".xlsx,.xls,.csv,.txt" hidden><p id="sT1" class="muted"></p></div>
-<div><label>File C</label><div id="dT2" class="drop sm">Drop file C or <u>click to choose</u></div><input id="fT2" type="file" accept=".xlsx,.xls,.csv,.txt" hidden><p id="sT2" class="muted"></p></div>
+<div><label>File A</label><div id="dT0" class="drop sm">Drop file A or <u>click to choose</u></div><input id="fT0" type="file" accept=".xlsx,.xls,.csv,.txt,.pgp,.xml" hidden><p id="sT0" class="muted"></p></div>
+<div><label>File B</label><div id="dT1" class="drop sm">Drop file B or <u>click to choose</u></div><input id="fT1" type="file" accept=".xlsx,.xls,.csv,.txt,.pgp,.xml" hidden><p id="sT1" class="muted"></p></div>
+<div><label>File C</label><div id="dT2" class="drop sm">Drop file C or <u>click to choose</u></div><input id="fT2" type="file" accept=".xlsx,.xls,.csv,.txt,.pgp,.xml" hidden><p id="sT2" class="muted"></p></div>
 </div>
 <div class="controls" style="margin-top:12px"><label>Match key(s) (Ctrl/Cmd-click to pick several)<select id="keyT" multiple size="4" style="min-width:240px"></select></label></div>
 </div>
 <div id="tOut"></div>
 </section>
 <section id="pData" hidden>
-<div class="card"><h2>View file data</h2><p class="muted">Pick a loaded file. Files are loaded in each tab. Click a heading to sort, and use the filter box to search.</p><label>File<select id="dsSel"></select></label> <label>View<select id="dsMode"><option value="one">One file</option><option value="all">All loaded files side by side</option></select></label> <label>Filter (applies to every table shown)<input id="dsFilter" type="search" placeholder="Type to filter rows" style="min-width:240px"></label></div>
+<div class="card"><h2>View file data</h2><p class="muted">Pick a loaded file. Files are loaded in each tab. Click a heading to sort, and use the filter box to search. Rows highlighted in orange have no identical row in the other included files.</p><label>File<select id="dsSel"></select></label> <label>View<select id="dsMode"><option value="one">One file</option><option value="all">All loaded files side by side</option></select></label> <label>Filter (applies to every table shown)<input id="dsFilter" type="search" placeholder="Type to filter rows" style="min-width:240px"></label><div id="dsExcl" class="controls" style="margin-top:10px;flex-direction:column;align-items:flex-start"></div></div>
 <div id="dataOut"></div>
+<div id="mismatchOut"></div>
+</section>
+<section id="pAdmin" hidden>
+<div class="card"><h2>Admin panel</h2><p class="muted" id="adminNote"></p>
+<div class="grid2">
+<div><h2>Client logo</h2><div id="logoPreview" style="min-height:90px;display:flex;align-items:center"></div><p class="muted">PNG, JPG or SVG. Large images are resized automatically. The logo appears in the header on every page and is shared with everyone who opens the app.</p></div>
+<div><label>Choose logo file<input id="logoFile" type="file" accept="image/png,image/jpeg,image/svg+xml"></label><div class="controls" style="margin-top:12px"><button id="logoSave" class="tab">Save logo</button><button id="logoRemove" class="tab">Remove logo</button></div><p id="logoMsg" class="muted"></p></div>
+</div></div>
+</section>
+<section id="pTrend" hidden>
+<div class="card"><h2>Combined trend from multiple files</h2><p class="muted">Uses every loaded file that is included in View data. Values are combined per period on the metric you choose.</p><div class="controls"><label>Metric<select id="tkM"></select></label><label>Date column<select id="tkD"></select></label><label>Period<select id="tkF"><option value="M">Monthly</option><option value="Q">Quarterly</option><option value="Y">Yearly</option></select></label><label>Combine by<select id="tkA"><option value="sum">Total</option><option value="avg">Average</option></select></label></div></div>
+<div id="trendOut"></div>
+</section>
+<section id="pAnal" hidden>
+<div class="card"><h2>Data analysis</h2><p class="muted">Group numeric and text data by one or two dimensions and measure it. Text columns with up to 100 distinct values can be used as dimensions. The column profile covers every column, numeric or not.</p><div class="controls"><label>Source<select id="anSrc"></select></label><label>Group by<select id="anD1"></select></label><label>Split by (optional)<select id="anD2"></select></label><label>Measure<select id="anM"></select></label><label>Aggregate<select id="anA"><option value="sum">Sum</option><option value="avg">Average</option><option value="count">Count</option><option value="min">Minimum</option><option value="max">Maximum</option><option value="median">Median</option></select></label></div></div>
+<div id="anOut"></div>
+</section>
+<section id="pDoc" hidden>
+<div class="card"><h2>Document viewer</h2><p class="muted">Open a Word (.docx) or PDF (.pdf) file to view it in the browser. The file stays on your device and is not uploaded.</p><label>Or view a file already loaded in the app<select id="docSrc"><option value="">(choose a loaded file)</option></select></label><input id="docFile" type="file" accept=".docx,.pdf,.xlsx,.xls,.csv"><div class="controls" style="margin-top:12px"><button id="genBtn" class="tab">Generate test cases</button><button id="sumBtn" class="tab">Summary and key insights</button><span id="genMsg" class="muted"></span></div><div class="controls" style="margin-top:10px"><span class="muted">Zoom</span><button id="zOut" class="tab">−</button><span id="zoomLbl">100%</span><button id="zIn" class="tab">+</button><button id="zReset" class="tab">Reset</button></div></div>
+<div id="docOut"></div>
+<div id="sumOut"></div>
+<div id="genOut"></div>
+</section>
+<section id="pMerge" hidden>
+<div class="card"><h2>Merge files</h2><p class="muted">Enter how many files to merge and create the upload boxes. Upload files of the same type (all CSV, or all Excel, and so on). You get a final summary, key actionable insights, and the merged data.</p>
+<div class="controls"><label>How many files?<input id="mN" type="number" min="2" max="10" value="2" style="max-width:100px"></label><button id="mSet" class="tab">Create upload boxes</button></div>
+<div id="mSlots" class="controls" style="margin-top:12px;flex-wrap:wrap"></div>
+<div class="controls" style="margin-top:12px"><button id="mRun" class="tab">Merge files</button><span id="mMsg" class="muted"></span></div></div>
+<div id="mOut"></div>
 </section>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
@@ -189,8 +260,41 @@ function txtToWorkbook(text){
   XLSX.utils.book_append_sheet(wbk,XLSX.utils.aoa_to_sheet(parseDelimited(text).map(r=>r.map(toCell))),'Text');
   return wbk;
 }
+function xmlToWorkbook(text){
+  const doc=new DOMParser().parseFromString(text,'application/xml');
+  if(doc.getElementsByTagName('parsererror').length)throw new Error('This XML file could not be parsed. Check that it is well-formed.');
+  let node=doc.documentElement;
+  while(node.children.length===1&&node.children[0].children.length)node=node.children[0];
+  const counts={};Array.from(node.children).forEach(c=>counts[c.tagName]=(counts[c.tagName]||0)+1);
+  const top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+  if(!top)throw new Error('No records found in this XML file.');
+  const recs=Array.from(node.children).filter(c=>c.tagName===top[0]);
+  const toCell=v=>{const t=String(v??'').trim();return t!==''&&!isNaN(Number(t))?Number(t):t};
+  const flatten=(el,prefix,out)=>{
+    Array.from(el.attributes).forEach(a=>{out[prefix+'@'+a.name]=a.value});
+    Array.from(el.children).forEach(ch=>{
+      if(ch.children.length===0&&!ch.attributes.length){
+        let k=prefix+ch.tagName,n=2;while(out[k]!==undefined)k=prefix+ch.tagName+'#'+(n++);
+        out[k]=ch.textContent.trim();
+      }else flatten(ch,prefix+ch.tagName+'.',out);
+    });
+  };
+  const rows=recs.map(r=>{const o={};flatten(r,'',o);return o});
+  const cols=[];rows.forEach(o=>Object.keys(o).forEach(k=>{if(!cols.includes(k))cols.push(k)}));
+  const aoa=[cols,...rows.map(o=>cols.map(c=>toCell(o[c])))];
+  const wbk=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wbk,XLSX.utils.aoa_to_sheet(aoa),'XML');
+  return wbk;
+}
 async function readWorkbook(file){
-  if(/\.txt$/i.test(file.name))return txtToWorkbook(new TextDecoder().decode(await file.arrayBuffer()));
+  if(/\.xml$/i.test(file.name))return xmlToWorkbook(new TextDecoder().decode(await file.arrayBuffer()));
+  if(/\.(pgp|txt)$/i.test(file.name)){
+    const buf=await file.arrayBuffer(),u=new Uint8Array(buf);
+    if(u[0]===0x50&&u[1]===0x4B)return XLSX.read(buf,{type:'array',cellDates:true});
+    const text=new TextDecoder().decode(buf);
+    if(/-----BEGIN PGP MESSAGE-----/.test(text))throw new Error('This Workday file is PGP-encrypted, so it cannot be read in the browser. Decrypt it first with your key (for example, using GPG), then upload the decrypted CSV, TXT, or Excel file.');
+    return txtToWorkbook(text);
+  }
   return XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:true});
 }
 
@@ -356,8 +460,8 @@ const norm=v=>v instanceof Date?v.toISOString().slice(0,10):typeof v==='number'?
 const fmtv=v=>typeof v==='number'?fmt(v):esc(norm(v));
 const isN=(ds,c)=>ds.rows.filter(r=>r[c]!==''&&r[c]!=null).slice(0,300).every(r=>typeof r[c]==='number');
 
-$('tA').onclick=()=>showTab('A');$('tC').onclick=()=>showTab('C');$('tM').onclick=()=>showTab('M');$('tT').onclick=()=>showTab('T');$('tD').onclick=()=>showTab('D');
-function showTab(t){if(t==='M')populateMatch();$('pAnalyze').hidden=t!=='A';$('pCompare').hidden=t!=='C';$('pMatch').hidden=t!=='M';$('pThree').hidden=t!=='T';$('pData').hidden=t!=='D';$('tD').classList.toggle('on',t==='D');if(t==='D')renderData();$('tT').classList.toggle('on',t==='T');$('tA').classList.toggle('on',t==='A');$('tC').classList.toggle('on',t==='C');$('tM').classList.toggle('on',t==='M')}
+$('tA').onclick=()=>showTab('A');$('tC').onclick=()=>showTab('C');$('tM').onclick=()=>showTab('M');$('tT').onclick=()=>showTab('T');$('tD').onclick=()=>showTab('D');$('tX').onclick=()=>showTab('X');$('tK').onclick=()=>showTab('K');$('tY').onclick=()=>showTab('Y');$('tV').onclick=()=>showTab('V');$('tG').onclick=()=>showTab('G');
+function showTab(t){if(t==='M')populateMatch();$('pAnalyze').hidden=t!=='A';$('pCompare').hidden=t!=='C';$('pMatch').hidden=t!=='M';$('pThree').hidden=t!=='T';$('pData').hidden=t!=='D';$('tD').classList.toggle('on',t==='D');if(t==='D')renderData();$('pAdmin').hidden=t!=='X';$('pTrend').hidden=t!=='K';$('tK').classList.toggle('on',t==='K');if(t==='K')renderTrend();$('pAnal').hidden=t!=='Y';$('tY').classList.toggle('on',t==='Y');if(t==='Y')renderAnalysis();$('pDoc').hidden=t!=='V';$('tV').classList.toggle('on',t==='V');if(t==='V')populateDocSrc();$('pMerge').hidden=t!=='G';$('tG').classList.toggle('on',t==='G');$('tX').classList.toggle('on',t==='X');$('tT').classList.toggle('on',t==='T');$('tA').classList.toggle('on',t==='A');$('tC').classList.toggle('on',t==='C');$('tM').classList.toggle('on',t==='M')}
 
 async function readFile(file){
   const wbk=await readWorkbook(file);
@@ -414,7 +518,7 @@ function buildReport(A,B,key,pairs,diffs,colChanged,unA,unB,onlyA,onlyB,common){
   ];
   const colPairs=cols.filter(c=>colChanged[c]).map(c=>[c,colChanged[c]]);
   const kpis=[['Rows in '+A.name,fmt(A.rows.length,0)],['Rows in '+B.name,fmt(B.rows.length,0)],['Identical rows',fmt(rc.identical,0)],['Changed rows',fmt(rc.changed,0)],['Only in A',fmt(rc.onlyA,0)],['Only in B',fmt(rc.onlyB,0)],['Differing cells',fmt(diffs.length,0)],['Field mismatches',fmt(colMis,0)],['File size (A / B)',fileSizeStr(A.size)+' / '+fileSizeStr(B.size)]];
-  const html=`<div class="card"><h2>Comparison report</h2><p class="muted">${esc(A.name)} vs ${esc(B.name)} \u00b7 generated ${esc(new Date().toLocaleString())} \u00b7 <button id="printBtn" class="tab noprint">Print / Save as PDF</button></p><div class="kpis">${kpis.map(([l,v])=>`<div class="card kpi"><div class="v">${v}</div><div class="l">${esc(l)}</div></div>`).join('')}</div></div>`+
+  const html=`<div class="card"><h2>Comparison report</h2><p class="muted">${ftag(A.name,PAL[0])} vs ${ftag(B.name,PAL[1])} \u00b7 generated ${esc(new Date().toLocaleString())} \u00b7 <button id="printBtn" class="tab noprint">Print / Save as PDF</button></p><div class="kpis">${kpis.map(([l,v])=>`<div class="card kpi"><div class="v">${v}</div><div class="l">${esc(l)}</div></div>`).join('')}</div></div>`+
     `<div class="grid2"><div class="card"><h2>Rows by status</h2><canvas id="rptRows"></canvas></div><div class="card"><h2>Differing cells by column</h2>${colPairs.length?'<canvas id="rptCols"></canvas>':'<p class="muted">No differing cells.</p>'}</div></div>`+
     `<div class="card"><h2>Field mismatches</h2><div class="wrap">${table(['Column','Status','Differing cells','% of matched rows','Example'],fieldRows)}</div></div>`+
     `<div class="card"><h2>Row and content mismatches</h2><div class="wrap">${rowRows.length?table(['Row / key','Status','Columns changed','Content mismatch'],rowRows):'<p class="muted">No row mismatches.</p>'}</div></div>`;
@@ -477,6 +581,72 @@ function variationHeatmap(key,pairs,diffs,common){
   return `<div class="card"><h2>Variation heatmap</h2><p class="muted">Each row is a matched record and each column is a compared field. A filled red cell is a variation; darker red means a larger numeric difference. Hover a cell to see the values. \u00b7 means no variation. Showing ${rowsSorted.length} of ${byRow.size} rows with variations.</p><div class="tw"><input class="tf" type="search" placeholder="Filter rows…" aria-label="Filter rows"><table class="st"><thead><tr><th>${esc(key)}</th>${head}</tr></thead><tbody>${body}</tbody></table></div></div>`;
 }
 
+function actionPlan(A,B,key,pairs,diffs,colChanged,unA,unB,onlyA,onlyB,common){
+  const acts=[],add=(p,a,b)=>acts.push({p,a,b});
+  const n=(pairs.length+unA.length+unB.length)||1,T=diffs.length;
+  if(unA.length)add(unA.length/n>=0.1?'High':'Medium',`Investigate ${fmt(unA.length,0)} record(s) present only in ${A.name}. Check whether ${B.name} was filtered, records were deleted, or key values were reformatted.`,`${fmt(unA.length,0)} rows only in A`);
+  if(unB.length)add(unB.length/n>=0.1?'High':'Medium',`Confirm the ${fmt(unB.length,0)} record(s) only in ${B.name} are expected new data. If not, check the extract filter.`,`${fmt(unB.length,0)} rows only in B`);
+  if(onlyA.length||onlyB.length)add('High','Align the column structure: rename or add the fields that exist in only one file, then re-run the comparison.',`${fmt(onlyA.length+onlyB.length,0)} column(s) not shared`);
+  const blank=diffs.filter(d=>d.x===''||d.y==='').length;
+  if(blank)add(T&&blank/T>=0.2?'High':'Medium','Decide how blank values should be handled, then fill or document the gaps at the source.',`${fmt(blank,0)} blank-vs-filled cell(s)`);
+  common.filter(c=>c!==key&&colChanged[c]>=3).forEach(c=>{
+    const nd=diffs.filter(d=>d.c===c);
+    const rs=nd.filter(d=>typeof d.x==='number'&&typeof d.y==='number'&&d.x!==0).map(d=>d.y/d.x).sort((p,q)=>p-q);
+    if(rs.length===nd.length&&rs.length>=3){
+      const med=rs[Math.floor(rs.length/2)];
+      if(Math.abs(med-1)>0.01&&rs.every(r=>Math.abs(r/med-1)<0.01))add('High',`Check for a unit or currency conversion in ${c}: every changed value differs by the same factor (${fmt(med,3)}).`,`${fmt(rs.length,0)} cells`);
+    }
+  });
+  const top=common.filter(c=>c!==key&&colChanged[c]).sort((a,b)=>colChanged[b]-colChanged[a])[0];
+  if(top)add('Medium',`Review the source logic for ${top}, the most-varied column, and add a validation rule if it should not change.`,`${fmt(colChanged[top],0)} variations`);
+  const perRow={};diffs.forEach(d=>perRow[d.k]=(perRow[d.k]||0)+1);
+  const multi=Object.values(perRow).filter(v=>v>=3).length;
+  if(multi)add('Medium',`Start the review with the ${fmt(multi,0)} record(s) that have three or more variations.`,`${fmt(multi,0)} rows`);
+  if(!acts.length)add('Low','No action needed: the files match on all compared fields.','0 variations');
+  const rank={High:0,Medium:1,Low:2};
+  acts.sort((x,y)=>rank[x.p]-rank[y.p]);
+  return `<div class="card"><h2>Actionable insights</h2><div class="wrap">${table(['Priority','Recommended action','Basis'],acts.map(x=>[x.p,esc(x.a),esc(x.b)]))}</div></div>`;
+}
+
+function labelCheck(A,B){
+  const norm=s=>String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
+  const aset=new Set(A.cols),bset=new Set(B.cols);
+  const shared=A.cols.filter(c=>bset.has(c));
+  let onlyA=A.cols.filter(c=>!bset.has(c)),onlyB=B.cols.filter(c=>!aset.has(c));
+  const rows=[];
+  onlyA.slice().forEach(a=>{
+    const i=onlyB.findIndex(b=>norm(b)===norm(a));
+    if(i>=0){
+      rows.push(['Label format differs',`<mark class="ycell">${esc(a)}</mark>`,`<mark class="ycell">${esc(onlyB[i])}</mark>`]);
+      onlyB.splice(i,1);onlyA=onlyA.filter(x=>x!==a);
+    }
+  });
+  onlyA.forEach(a=>rows.push([esc('Missing in '+B.name),`<mark class="lmiss">${esc(a)}</mark>`,'\u2013']));
+  onlyB.forEach(b=>rows.push([esc('Missing in '+A.name),'\u2013',`<mark class="lmiss">${esc(b)}</mark>`]));
+  const summary=rows.length?`${fmt(shared.length,0)} label(s) match exactly; ${fmt(rows.length,0)} label mismatch(es) found.`:`All ${fmt(shared.length,0)} field label(s) match exactly.`;
+  return `<div class="card"><h2>Field label check</h2><p>${esc(summary)}</p>${rows.length?table(['Status','File A label','File B label'],rows):''}</div>`;
+}
+
+function exactLabelCheck(A,B){
+  const show=s=>`"${esc(String(s)).replace(/ /g,'\u2423')}"`;
+  const norm=s=>String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
+  const aset=new Set(A.cols),bset=new Set(B.cols);
+  const exact=A.cols.filter(c=>bset.has(c)).length;
+  let onlyA=A.cols.filter(c=>!bset.has(c)),onlyB=B.cols.filter(c=>!aset.has(c));
+  const rows=[];
+  onlyA.slice().forEach(a=>{
+    const i=onlyB.findIndex(b=>norm(b)===norm(a));
+    if(i>=0){
+      rows.push(['<mark class="ycell">Different</mark>',show(a),show(onlyB[i]),'Not an exact match (case, spacing or punctuation)']);
+      onlyB.splice(i,1);onlyA=onlyA.filter(x=>x!==a);
+    }
+  });
+  onlyA.forEach(a=>rows.push([`<mark class="lmiss">${esc('Missing in '+B.name)}</mark>`,show(a),'\u2013','No matching label in the other file']));
+  onlyB.forEach(b=>rows.push([`<mark class="lmiss">${esc('Missing in '+A.name)}</mark>`,'\u2013',show(b),'No matching label in the other file']));
+  const status=rows.length?`${fmt(exact,0)} label(s) match exactly; ${fmt(rows.length,0)} label(s) do not match exactly.`:`All ${fmt(exact,0)} field label(s) match exactly.`;
+  return `<div class="card"><h2>Exact field label check</h2><p>${esc(status)}</p><p class="muted">Labels are compared character by character. Any difference in case, spacing, or punctuation is a mismatch. Spaces are shown as \u2423.</p>${rows.length?table(['Status','File A label (exact)','File B label (exact)','Note'],rows):''}</div>`;
+}
+
 function fileSizeStr(b){if(b==null||isNaN(b))return '\u2013';if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(2)+' MB'}
 
 function sizeCard(A,B){
@@ -530,6 +700,20 @@ document.addEventListener('input',e=>{
   pageRefresh(t.closest('.tw'));
 });
 
+const EXCLUDED=new Set();
+function renderExcl(){
+  const all=dataSources(),box=$('dsExcl');
+  if(!box)return;
+  if(!all.length){box.innerHTML='<span class="muted">Load files in any tab to see them here.</span>';return}
+  box.innerHTML='<span class="muted">Untick a file to exclude it from this view:</span>'+all.map(s=>`<label style="flex-direction:row;align-items:center;gap:6px;color:var(--ink)"><input type="checkbox" data-src="${esc(s.id)}" ${EXCLUDED.has(s.id)?'':'checked'}> ${esc(s.label)}</label>`).join('');
+}
+document.addEventListener('change',e=>{
+  const id=e.target.dataset&&e.target.dataset.src;
+  if(!id)return;
+  if(e.target.checked)EXCLUDED.delete(id);else EXCLUDED.add(id);
+  renderData();
+});
+
 function dataSources(){
   const list=[];
   if(rows.length)list.push({id:'an',label:'Analyze: '+curName,rows,cols});
@@ -540,36 +724,239 @@ function dataSources(){
 }
 
 function renderData(){
+  renderExcl();
+  renderMismatch();
   if($('dsMode').value==='all'){renderAll();return}
   renderDataOne();
   applyFilter();
 }
 
 function renderDataOne(){
-  const src=dataSources(),sel=$('dsSel'),prev=sel.value;
+  const src=dataSources().filter(s=>!EXCLUDED.has(s.id)),sel=$('dsSel'),prev=sel.value;
   sel.innerHTML=src.map(s=>`<option value="${s.id}">${esc(s.label)}</option>`).join('');
   if(src.some(s=>s.id===prev))sel.value=prev;
   const s=src.find(x=>x.id===sel.value)||src[0];
   if(!s){$('dataOut').innerHTML='<div class="card"><p class="muted">No files loaded yet. Load a file in any tab to view its data here.</p></div>';return}
   const head=s.cols,shown=s.rows.slice(0,1000);
   const body=shown.map(r=>head.map(c=>{const v=r[c];return v instanceof Date?esc(v.toISOString().slice(0,10)):esc(v)}));
-  $('dataOut').innerHTML=`<div class="card"><h2>${esc(s.label)}</h2><p class="muted">${fmt(s.rows.length,0)} rows × ${fmt(head.length,0)} columns${s.size!=null?' · '+fileSizeStr(s.size):''}${s.rows.length>1000?' · showing the first 1,000 rows':''}</p>${head.length?table(head,body):'<p class="muted">No columns found.</p>'}</div>`;
+  $('dataOut').innerHTML=`<div class="card"><h2>${ftag(s.label,srcColor(s.id))}</h2><p class="muted">${fmt(s.rows.length,0)} rows × ${fmt(head.length,0)} columns${s.size!=null?' · '+fileSizeStr(s.size):''}${s.rows.length>1000?' · showing the first 1,000 rows':''}</p>${head.length?table(head,body):'<p class="muted">No columns found.</p>'}</div>`;
 }
 $('dsSel').onchange=renderData;$('dsMode').onchange=renderData;$('dsFilter').oninput=applyFilter;
 
+function colKind(s,c){const v=s.rows.map(r=>r[c]).filter(x=>x!==''&&x!=null);if(!v.length)return 'Empty';if(v.every(x=>typeof x==='number'))return 'Numeric';if(v.every(x=>x instanceof Date))return 'Date';return 'Text'}
+function aggOf(vals,t){
+  if(t==='count')return vals.length;
+  const a=vals.filter(v=>typeof v==='number'&&isFinite(v));
+  if(!a.length)return null;
+  if(t==='avg')return a.reduce((x,y)=>x+y,0)/a.length;
+  if(t==='min')return Math.min(...a);
+  if(t==='max')return Math.max(...a);
+  if(t==='median')return quant(a,.5);
+  return a.reduce((x,y)=>x+y,0);
+}
+function heatSpan(v,mx){
+  if(v==null)return '\u00b7';
+  const a=mx?Math.min(1,Math.abs(v)/mx):0;
+  return `<span style="display:block;text-align:right;padding:4px 6px;border-radius:4px;background:rgba(46,134,193,${(0.12+0.6*a).toFixed(2)})">${esc(fmt(v))}</span>`;
+}
+function drawAnalysis(cfg){
+  const el=$('anChart');if(!el)return;
+  if(charts.anChart){charts.anChart.destroy();delete charts.anChart}
+  charts.anChart=new Chart(el,cfg);
+}
+
+function renderAnalysis(){
+  const out=$('anOut');
+  const srcs=dataSources().filter(s=>!EXCLUDED.has(s.id));
+  const sSel=$('anSrc'),prevS=sSel.value;
+  sSel.innerHTML=srcs.map(s=>`<option value="${esc(s.id)}">${esc(s.label)}</option>`).join('');
+  if(srcs.some(s=>s.id===prevS))sSel.value=prevS;
+  const s=srcs.find(x=>x.id===sSel.value);
+  if(!s){out.innerHTML='<div class="card"><p class="muted">Load and include a file in View data to analyse it here.</p></div>';return}
+  const kinds=s.cols.map(c=>[c,colKind(s,c)]);
+  const numCols=kinds.filter(k=>k[1]==='Numeric').map(k=>k[0]);
+  const dimCols=kinds.filter(k=>k[1]==='Text'&&new Set(s.rows.map(r=>String(r[k[0]]))).size<=100).map(k=>k[0]);
+  const d1=$('anD1'),d2=$('anD2'),mSel=$('anM');
+  const p1=d1.value,p2=d2.value,pm=mSel.value;
+  d1.innerHTML=dimCols.map(c=>`<option>${esc(c)}</option>`).join('');
+  if(dimCols.includes(p1))d1.value=p1;
+  d2.innerHTML='<option value="">(none)</option>'+dimCols.filter(c=>c!==d1.value).map(c=>`<option>${esc(c)}</option>`).join('');
+  if(p2&&p2!==d1.value&&dimCols.includes(p2))d2.value=p2;
+  mSel.innerHTML='<option value="">(Count of records)</option>'+numCols.map(c=>`<option>${esc(c)}</option>`).join('');
+  if(numCols.includes(pm))mSel.value=pm;
+  const D1=d1.value,D2=d2.value,M=mSel.value,AT=$('anA').value;
+  if(!D1){out.innerHTML='<div class="card"><p class="muted">This file has no text column with up to 100 distinct values to group by.</p></div>';return}
+  const dimVal=(r,c)=>{const v=r[c];return v===''||v==null?'(blank)':String(v)};
+  const valsOf=g=>M?g.map(r=>r[M]):g.map(()=>1);
+  const aggType=M?AT:'sum';
+  const eff=g=>aggOf(valsOf(g),aggType);
+  const aggName={sum:'total',avg:'average',count:'count',min:'minimum',max:'maximum',median:'median'}[aggType];
+  const measName=M||'records';
+  const total=eff(s.rows);
+  const shareOK=aggType==='sum'||aggType==='count';
+  const group=(rowsArr,c)=>{const m=new Map();rowsArr.forEach(r=>{const k=dimVal(r,c);if(!m.has(k))m.set(k,[]);m.get(k).push(r)});return m};
+  const groups=[...group(s.rows,D1).entries()].map(([k,g])=>({k,g,v:eff(g)})).sort((a,b)=>(b.v||0)-(a.v||0));
+
+  const prof=s.cols.map(c=>{
+    const vals=s.rows.map(r=>r[c]),nb=vals.filter(v=>v!==''&&v!=null),kind=colKind(s,c);
+    const miss=vals.length?(vals.length-nb.length)/vals.length*100:0;
+    const distinct=new Set(nb.map(String)).size;
+    let info='';
+    if(kind==='Numeric')info=`min ${fmt(Math.min(...nb))}, max ${fmt(Math.max(...nb))}, average ${fmt(nb.reduce((x,y)=>x+y,0)/nb.length)}`;
+    else if(kind==='Date'){const ts=nb.map(d=>d.getTime());info=`${new Date(Math.min(...ts)).toISOString().slice(0,10)} to ${new Date(Math.max(...ts)).toISOString().slice(0,10)}`}
+    else if(kind==='Text'){const cnt={};nb.forEach(v=>cnt[v]=(cnt[v]||0)+1);const top=Object.entries(cnt).sort((x,y)=>y[1]-x[1])[0];if(top)info=`most common: ${top[0]} (${fmt(top[1],0)})`}
+    return[esc(c),kind,fmt(nb.length,0),fmt(miss,1)+'%',fmt(distinct,0),esc(info)];
+  });
+
+  const ins=[];
+  ins.push(`${fmt(groups.length,0)} distinct ${D1} value(s) across ${fmt(s.rows.length,0)} record(s).`);
+  const blank=s.rows.filter(r=>dimVal(r,D1)==='(blank)').length;
+  if(blank)ins.push(`${fmt(blank,0)} record(s) have no ${D1} value.`);
+  if(groups.length&&groups[0].v!=null){
+    const t=groups[0];
+    ins.push(shareOK&&total?`${t.k} has the largest ${aggName} of ${measName} (${fmt(t.v)}, ${fmt(t.v/total*100,1)}% of the total).`:`${t.k} has the highest ${aggName} of ${measName} (${fmt(t.v)}).`);
+  }
+  if(shareOK&&groups.length>=5){const k=Math.ceil(groups.length*.2);const top=groups.slice(0,k).reduce((t,g)=>t+(g.v||0),0);if(total)ins.push(`The top 20% of ${D1} values (${fmt(k,0)} groups) hold ${fmt(top/total*100,1)}% of the ${aggName}.`)}
+  if(M){
+    const nums=s.rows.map(r=>r[M]).filter(v=>typeof v==='number');
+    if(nums.length){const mean=aggOf(nums,'avg'),med=aggOf(nums,'median');ins.push(`${M} ranges from ${fmt(Math.min(...nums))} to ${fmt(Math.max(...nums))}, with an average of ${fmt(mean)} and a median of ${fmt(med)}.`);if(Math.abs(mean-med)>0.2*Math.abs(med||1))ins.push(`The average and median of ${M} differ by more than 20%, so a few large or small values are pulling the average.`)}
+  }
+
+  let body,head,chartCfg;
+  if(D2){
+    const cols=[...group(s.rows,D2).entries()].map(([k,g])=>({k,g,v:eff(g)})).sort((a,b)=>(b.v||0)-(a.v||0)).slice(0,15);
+    const rowsG=groups.slice(0,30);
+    const mat=rowsG.map(rg=>cols.map(cg=>aggOf(valsOf(rg.g.filter(r=>dimVal(r,D2)===cg.k)),aggType)));
+    const empty=rowsG.reduce((t,rg)=>t+cols.filter(cg=>!rg.g.some(r=>dimVal(r,D2)===cg.k)).length,0);
+    const mx=Math.max(1,...mat.flat().map(v=>Math.abs(v||0)));
+    let best=null;rowsG.forEach((rg,i)=>cols.forEach((cg,j)=>{const v=mat[i][j];if(v!=null&&(!best||v>best.v))best={v,r:rg.k,c:cg.k}}));
+    if(best)ins.push(`Strongest combination: ${best.r} with ${best.c} (${fmt(best.v)}).`);
+    ins.push(`${fmt(empty,0)} of ${fmt(rowsG.length*cols.length,0)} ${D1} × ${D2} combinations have no records.`);
+    head=[`${D1} \\ ${D2}`,...cols.map(c=>c.k),'Total'];
+    body=rowsG.map((rg,i)=>[esc(rg.k),...mat[i].map(v=>heatSpan(v,mx)),heatSpan(rg.v,mx)]);
+    body.push(['Total',...cols.map(cg=>heatSpan(eff(cg.g),mx)),heatSpan(total,mx)]);
+    chartCfg={type:'bar',data:{labels:rowsG.map(g=>g.k),datasets:cols.slice(0,8).map((cg,j)=>({label:cg.k,data:mat.map(row=>row[j]||0),backgroundColor:PAL[j%PAL.length]}))},options:{scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}},plugins:{legend:{position:'bottom'}}}};
+  }else{
+    head=[D1,'Records',`${aggName} of ${measName}`,shareOK?'Share %':'Share %','Average','Minimum','Maximum'];
+    body=groups.map(g=>{const nums=M?g.g.map(r=>r[M]).filter(v=>typeof v==='number'):[];return[esc(g.k),fmt(g.g.length,0),fmt(g.v),shareOK&&total?fmt(g.v/total*100,1)+'%':'\u2013',M&&nums.length?fmt(aggOf(nums,'avg')):'\u2013',M&&nums.length?fmt(aggOf(nums,'min')):'\u2013',M&&nums.length?fmt(aggOf(nums,'max')):'\u2013']});
+    const top=groups.slice(0,20);
+    chartCfg={type:'bar',data:{labels:top.map(g=>g.k),datasets:[{label:`${aggName} of ${measName}`,data:top.map(g=>g.v||0),backgroundColor:PAL[0]}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}};
+  }
+  out.innerHTML=
+    `<div class="card"><h2>Key insights</h2><ul style="margin:0;padding-left:20px;line-height:1.6">${ins.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>`+
+    `<div class="card"><h2>Analysis by ${esc(D1)}${D2?' and '+esc(D2):''}</h2>${table(head,body)}</div>`+
+    `<div class="card"><h2>Chart</h2><canvas id="anChart"></canvas></div>`+
+    `<div class="card"><h2>Column profile (numeric and non-numeric)</h2>${table(['Column','Type','Non-blank','Missing','Distinct','Summary'],prof)}</div>`;
+  requestAnimationFrame(()=>drawAnalysis(chartCfg));
+}
+['anSrc','anD1','anD2','anM','anA'].forEach(id=>$(id).onchange=renderAnalysis);
+
+function renderTrend(){
+  const out=$('trendOut'),mSel=$('tkM'),dSel=$('tkD');
+  const srcs=dataSources().filter(s=>!EXCLUDED.has(s.id));
+  const mPrev=mSel.value,dPrev=dSel.value;
+  const numCols=[...new Set(srcs.flatMap(s=>s.cols.filter(c=>s.rows.some(r=>typeof r[c]==='number'))))];
+  const dateCols=[...new Set(srcs.flatMap(s=>s.cols.filter(c=>/date|time|month|period/i.test(c)||s.rows.slice(0,20).some(r=>r[c] instanceof Date))))];
+  mSel.innerHTML=numCols.map(c=>`<option>${esc(c)}</option>`).join('');
+  dSel.innerHTML=dateCols.map(c=>`<option>${esc(c)}</option>`).join('');
+  if(numCols.includes(mPrev))mSel.value=mPrev;
+  if(dateCols.includes(dPrev))dSel.value=dPrev;
+  if(!srcs.length||!numCols.length||!dateCols.length){out.innerHTML='<div class="card"><p class="muted">Load at least one file with a numeric metric and a date column to see the combined trend.</p></div>';return}
+  const M=mSel.value,D=dSel.value,F=$('tkF').value,AG=$('tkA').value;
+  const perSrc=srcs.map(s=>{
+    const has=s.cols.includes(M)&&s.cols.includes(D),m=new Map();
+    if(has)s.rows.forEach(r=>{const k=periodKey(r[D],F),v=r[M];if(!k||typeof v!=='number')return;const e=m.get(k)||{sum:0,n:0};e.sum+=v;e.n++;m.set(k,e)});
+    return{s,has,m};
+  });
+  const combined=new Map();
+  perSrc.forEach(p=>p.m.forEach((e,k)=>{const c=combined.get(k)||{sum:0,n:0};c.sum+=e.sum;c.n+=e.n;combined.set(k,c)}));
+  const periods=[...combined.keys()].sort();
+  if(!periods.length){out.innerHTML=`<div class="card"><p class="muted">No dated values for ${esc(M)} in the selected files.</p></div>`;return}
+  const val=e=>!e?null:(AG==='avg'?(e.n?e.sum/e.n:null):e.sum);
+  const comb=periods.map(k=>val(combined.get(k)));
+  const series=perSrc.filter(p=>p.has&&p.m.size).map(p=>({label:p.s.label,data:periods.map(k=>val(p.m.get(k))),total:[...p.m.values()].reduce((t,e)=>t+e.sum,0)}));
+  const skipped=perSrc.filter(p=>!p.has).map(p=>p.s.label);
+  const unit=F==='M'?'month':F==='Q'?'quarter':'year';
+  let firstI=0;while(firstI<comb.length&&comb[firstI]==null)firstI++;
+  let lastI=comb.length-1;while(lastI>=0&&comb[lastI]==null)lastI--;
+  let peakI=-1,lowI=-1;
+  comb.forEach((v,i)=>{if(v==null)return;if(peakI<0||v>comb[peakI])peakI=i;if(lowI<0||v<comb[lowI])lowI=i});
+  const ins=[];
+  ins.push(`Combined ${AG==='avg'?'average':'total'} of ${M} across ${series.length} file(s) and ${periods.length} ${unit} period(s), from ${periods[0]} to ${periods[periods.length-1]}.`);
+  if(firstI<lastI){const chg=(comb[lastI]-comb[firstI])/Math.abs(comb[firstI])*100;if(isFinite(chg))ins.push(`Trend from ${periods[firstI]} to ${periods[lastI]}: ${chg>=0?'up':'down'} ${fmt(Math.abs(chg),1)}%.`)}
+  if(peakI>=0)ins.push(`Peak period: ${periods[peakI]} (${fmt(comb[peakI])}). Lowest period: ${periods[lowI]} (${fmt(comb[lowI])}).`);
+  if(AG==='sum'&&series.length){const grand=series.reduce((t,x)=>t+x.total,0),top=[...series].sort((a,b)=>b.total-a.total)[0];if(grand)ins.push(`Largest contributor overall: ${top.label} (${fmt(top.total)}, ${fmt(top.total/grand*100,1)}% of the combined total).`)}
+  if(skipped.length)ins.push(`Skipped because they lack ${M} or ${D}: ${skipped.join(', ')}.`);
+  const head=['Period',...series.map(x=>x.label),'Combined'];
+  const body=periods.map((k,i)=>[k,...series.map(x=>fmt(x.data[i])),fmt(comb[i])]);
+  out.innerHTML=
+    `<div class="card"><h2>Key insights</h2><ul style="margin:0;padding-left:20px;line-height:1.6">${ins.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>`+
+    `<div class="card"><h2>Trend</h2><canvas id="tkChart"></canvas></div>`+
+    `<div class="card"><h2>Period values by file</h2>${table(head,body)}</div>`;
+  requestAnimationFrame(()=>drawTrend(periods,series,comb));
+}
+
+function drawTrend(periods,series,comb){
+  const el=$('tkChart');if(!el)return;
+  if(charts.tkChart){charts.tkChart.destroy();delete charts.tkChart}
+  const accent=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#1f4e78';
+  const ds=series.map((x,i)=>({label:x.label,data:x.data,borderColor:PAL[i%PAL.length],backgroundColor:PAL[i%PAL.length],tension:.25,spanGaps:true,fill:false}));
+  ds.push({label:'Combined',data:comb,borderColor:accent,backgroundColor:accent,borderDash:[6,4],borderWidth:3,tension:.25,spanGaps:true,fill:false});
+  charts.tkChart=new Chart(el,{type:'line',data:{labels:periods,datasets:ds},options:{plugins:{legend:{position:'bottom'}}}});
+}
+['tkM','tkD','tkF','tkA'].forEach(id=>$(id).onchange=renderTrend);
+
+function renderMismatch(){
+  const el=$('mismatchOut');
+  if(!el)return;
+  const srcs=dataSources().filter(s=>!EXCLUDED.has(s.id));
+  if(srcs.length<2){el.innerHTML='<div class="card"><h2>Mismatched records</h2><p class="muted">Include at least two files to see records that do not match.</p></div>';return}
+  el.innerHTML=`<div class="card"><h2>Mismatched records only</h2><p class="muted">Each table lists only the records in that file that have no identical record in the other included files.</p></div>`+srcs.map(s=>{
+    const others=srcs.filter(o=>o!==s);
+    const otherSet=new Set();
+    others.forEach(o=>o.rows.forEach(r=>otherSet.add(sigText(o,r))));
+    const bad=s.rows.filter(r=>!otherSet.has(sigText(s,r)));
+    const body=bad.map(r=>s.cols.map(c=>{const v=r[c];return v instanceof Date?esc(v.toISOString().slice(0,10)):esc(v)}));
+    return `<div class="card"><h2>${ftag(s.label,srcColor(s.id))}</h2><p class="muted">${fmt(bad.length,0)} of ${fmt(s.rows.length,0)} record(s) have no identical match in the other included files.</p>${bad.length&&s.cols.length?table(s.cols,body):'<p class="muted">No mismatched records.</p>'}</div>`;
+  }).join('');
+}
+
+const PAL=['#2e86c1','#e67e22','#27ae60','#8e44ad','#c0392b','#16a085'];
+function ftag(name,color){return `<span style="background:${color};color:#fff;padding:2px 10px;border-radius:999px;font-weight:bold;text-shadow:0 1px 2px rgba(0,0,0,.25);box-shadow:0 3px 8px -3px ${color}">${esc(name)}</span>`}
+function srcColor(id){const i=dataSources().findIndex(x=>x.id===id);return PAL[(i<0?0:i)%PAL.length]}
+function sigText(s,r){return s.cols.slice().sort().map(c=>{const v=r[c];return v instanceof Date?v.toISOString().slice(0,10):String(v)}).join('|')}
+function markDiffRows(){
+  const srcs=dataSources().filter(s=>!EXCLUDED.has(s.id));
+  const single=srcs.find(s=>s.id===$('dsSel').value);
+  const mode=$('dsMode').value;
+  Array.from($('dataOut').querySelectorAll('table.st')).forEach((t,i)=>{
+    const s=mode==='all'?srcs[i]:single;
+    if(!s||!t.tHead)return;
+    const others=srcs.filter(o=>o!==s);
+    const otherSet=new Set();
+    others.forEach(o=>o.rows.forEach(r=>otherSet.add(sigText(o,r))));
+    const heads=Array.from(t.tHead.rows[0].cells).map(th=>th.textContent);
+    Array.from(t.tBodies[0].rows).forEach(tr=>{
+      const k=heads.map((h,j)=>[h,tr.cells[j]?tr.cells[j].textContent:'']).sort((a,b)=>a[0]<b[0]?-1:a[0]>b[0]?1:0).map(x=>x[1]).join('|');
+      tr.classList.toggle('hdiff',others.length>0&&!otherSet.has(k));
+    });
+  });
+}
+
 function renderAll(){
-  const src=dataSources(),out=$('dataOut');
+  const src=dataSources().filter(s=>!EXCLUDED.has(s.id)),out=$('dataOut');
   if(!src.length){out.innerHTML='<div class="card"><p class="muted">No files loaded yet. Load a file in any tab to view its data here.</p></div>';return}
   const cards=src.map(s=>{
     const shown=s.rows.slice(0,500);
     const body=shown.map(r=>s.cols.map(c=>{const v=r[c];return v instanceof Date?esc(v.toISOString().slice(0,10)):esc(v)}));
-    return `<div class="card"><h2>${esc(s.label)}</h2><p class="muted">${fmt(s.rows.length,0)} rows \u00d7 ${fmt(s.cols.length,0)} columns${s.rows.length>500?' \u00b7 first 500 shown':''}</p>${s.cols.length?table(s.cols,body):''}</div>`;
+    return `<div class="card"><h2>${ftag(s.label,srcColor(s.id))}</h2> \u00d7 ${fmt(s.cols.length,0)} columns${s.rows.length>500?' \u00b7 first 500 shown':''}</p>${s.cols.length?table(s.cols,body):''}</div>`;
   }).join('');
   out.innerHTML=`<div class="allmode" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">${cards}</div>`;
   applyFilter();
 }
 
 function applyFilter(){
+  markDiffRows();
   const q=$('dsFilter').value.trim().toLowerCase();
   document.querySelectorAll('#dataOut table.st tbody').forEach(tb=>Array.from(tb.rows).forEach(r=>{r.hidden=!!q&&!r.textContent.toLowerCase().includes(q)}));
   document.querySelectorAll('#dataOut .tw').forEach(pageRefresh);
@@ -614,8 +1001,8 @@ document.addEventListener('change',e=>{
   pageRefresh(tw);
 });
 
-const EXP_TABS=['pAnalyze','pCompare','pMatch','pThree','pData'];
-const EXP_NAMES={pAnalyze:'analyze',pCompare:'compare',pMatch:'match',pThree:'three-files',pData:'view-data'};
+const EXP_TABS=['pAnalyze','pCompare','pMatch','pThree','pData','pDoc','pMerge'];
+const EXP_NAMES={pAnalyze:'analyze',pCompare:'compare',pMatch:'match',pThree:'three-files',pData:'view-data',pDoc:'documents',pMerge:'merged'};
 function expMsg(t){$('expMsg').textContent=t}
 function stamp(){return new Date().toISOString().slice(0,16).replace(/[:T]/g,'-')}
 function expTables(){
@@ -677,6 +1064,308 @@ async function exportPdf(){
 }
 $('exL').onclick=exportExcel;
 $('exP').onclick=exportPdf;
+
+let DB=null,ADMIN=false,CURRENT_LOGO='';
+function logoMsg(t){$('logoMsg').textContent=t}
+function fileToLogo(file){
+  return new Promise((resolve,reject)=>{
+    if(file.type==='image/svg+xml'){
+      if(file.size>100000)return reject(new Error('SVG logo must be under 100 KB'));
+      const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(new Error('Could not read file'));r.readAsDataURL(file);return;
+    }
+    const url=URL.createObjectURL(file),img=new Image();
+    img.onload=()=>{
+      const s=Math.min(1,320/Math.max(img.width,img.height));
+      const c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*s));c.height=Math.max(1,Math.round(img.height*s));
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      let d=c.toDataURL('image/png');if(d.length>180000)d=c.toDataURL('image/jpeg',0.85);
+      URL.revokeObjectURL(url);
+      d.length>240000?reject(new Error('Image is too complex. Choose a simpler logo.')):resolve(d);
+    };
+    img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Could not read image'))};
+    img.src=url;
+  });
+}
+function setLogo(url){
+  CURRENT_LOGO=url||'';
+  const h=$('clientLogo');
+  if(url){h.src=url;h.hidden=false}else{h.removeAttribute('src');h.hidden=true}
+  const pv=$('logoPreview');pv.innerHTML='';
+  if(url){const im=document.createElement('img');im.src=url;im.alt='Current logo';im.style.cssText='max-height:90px;max-width:100%;object-fit:contain';pv.appendChild(im)}
+  else{const s=document.createElement('span');s.className='muted';s.textContent='No logo set.';pv.appendChild(s)}
+}
+function adminUI(){
+  $('logoFile').disabled=!ADMIN;$('logoSave').disabled=!ADMIN;$('logoRemove').disabled=!ADMIN;
+  $('adminNote').textContent=ADMIN?'You are an editor, so you can change the client logo.':'Only editors can change the client logo. You can view it here.';
+}
+async function saveLogo(){
+  const f=$('logoFile').files[0];
+  if(!f)return logoMsg('Choose an image first.');
+  if(!DB||!ADMIN)return logoMsg('Only editors can change the logo.');
+  if(f.size>5*1024*1024)return logoMsg('Image is over 5 MB. Choose a smaller file.');
+  logoMsg('Saving\u2026');
+  try{
+    const d=await fileToLogo(f);
+    await DB.doc('branding/logo').set({dataUrl:d,fileName:f.name,updated:new Date().toISOString()});
+    $('logoFile').value='';
+    logoMsg('Logo saved. It now appears on every page.');
+  }catch(e){logoMsg(e&&e.code==='invalid_argument'?'Only editors can change the logo.':(e&&e.message)||'Logo could not be saved.')}
+}
+async function removeLogo(){
+  if(!DB||!ADMIN)return logoMsg('Only editors can change the logo.');
+  try{await DB.doc('branding/logo').delete();logoMsg('Logo removed.')}
+  catch(e){logoMsg('Logo could not be removed.')}
+}
+async function initLogo(){
+  try{
+    const db=window.claude&&window.claude.use?await window.claude.use('db'):null;
+    const user=window.claude&&window.claude.use?await window.claude.use('user'):null;
+    ADMIN=!!(user&&(await user.canEdit()));
+    DB=db;
+    adminUI();
+    if(!db){logoMsg('Shared logo storage is not available in this view.');return}
+    db.doc('branding/logo').onSnapshot(snap=>{const d=snap.exists?snap.data():null;setLogo(d&&d.dataUrl?d.dataUrl:'')},e=>logoMsg('Logo updates stopped: '+((e&&e.message)||'unavailable')));
+  }catch(e){logoMsg('Logo storage could not start.')}
+}
+$('logoSave').onclick=saveLogo;
+$('logoRemove').onclick=removeLogo;
+initLogo();
+showTab('C');
+
+const TZ=[['Local time',''],['UTC','UTC'],['India (IST)','Asia/Kolkata'],['New York (ET)','America/New_York'],['Los Angeles (PT)','America/Los_Angeles'],['London (GMT/BST)','Europe/London'],['Paris (CET)','Europe/Paris'],['Dubai (GST)','Asia/Dubai'],['Singapore (SGT)','Asia/Singapore'],['Tokyo (JST)','Asia/Tokyo'],['Sydney (AEST)','Australia/Sydney']];
+$('tzSel').innerHTML=TZ.map(([l,z])=>`<option value="${z}">${esc(l)}</option>`).join('');
+function tickClock(){
+  const z=$('tzSel').value;
+  const opts={weekday:'short',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'};
+  if(z)opts.timeZone=z;
+  try{$('clockTxt').textContent=new Intl.DateTimeFormat(undefined,opts).format(new Date())}
+  catch(e){$('clockTxt').textContent='Time zone not supported'}
+}
+$('tzSel').onchange=tickClock;
+setInterval(tickClock,1000);
+tickClock();
+
+let XL_WB=null;
+function showSheet(wbk,name){
+  XL_WB=wbk;
+  const aoa=XLSX.utils.sheet_to_json(wbk.Sheets[name],{header:1,defval:'',raw:true});
+  const head=(aoa[0]||[]).map(v=>String(v));
+  const body=aoa.slice(1,5001).map(r=>head.map((_,i)=>{const v=r[i];return v instanceof Date?esc(v.toISOString().slice(0,10)):esc(v)}));
+  document.querySelectorAll('#xlTabs button').forEach(b=>b.classList.toggle('on',b.dataset.sheet===name));
+  $('xlBody').innerHTML=`<p class="muted">${fmt(Math.max(0,aoa.length-1),0)} row(s), ${fmt(head.length,0)} column(s)${aoa.length>5001?' · first 5,000 shown':''}</p>`+(head.length?table(head,body):'<p class="muted">This sheet is empty.</p>');
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('#xlTabs button');
+  if(b&&XL_WB)showSheet(XL_WB,b.dataset.sheet);
+});
+
+function populateDocSrc(){
+  const sel=$('docSrc'),prev=sel.value;
+  sel.innerHTML='<option value="">(choose a loaded file)</option>'+dataSources().map(s=>`<option value="${esc(s.id)}">${esc(s.label)}</option>`).join('');
+  if(dataSources().some(s=>s.id===prev))sel.value=prev;
+}
+function viewLoaded(id){
+  const s=dataSources().find(x=>x.id===id);
+  const out=$('docOut');
+  if(!s){out.innerHTML='';return}
+  const ws=XLSX.utils.aoa_to_sheet([s.cols,...s.rows.map(r=>s.cols.map(c=>r[c]))]);
+  const wbk=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wbk,ws,'Data');
+  LAST_DOC=new File([XLSX.utils.sheet_to_csv(ws)],s.label.replace(/[^\w.-]+/g,'_')+'.csv',{type:'text/csv'});
+  out.innerHTML=`<div class="card"><h2>${esc(s.label)}</h2><div id="xlTabs" class="controls" style="margin-bottom:12px"><button class="tab" data-sheet="Data">Data</button></div><div id="xlBody"></div></div>`;
+  showSheet(wbk,'Data');
+}
+$('docSrc').onchange=e=>viewLoaded(e.target.value);
+
+function setMergeSlots(){
+  const n=Math.max(2,Math.min(10,Number($('mN').value)||2));
+  $('mN').value=n;
+  $('mSlots').innerHTML=Array.from({length:n},(_,i)=>`<label>File ${i+1}<input type="file" accept=".xlsx,.xls,.csv,.txt,.xml"></label>`).join('');
+  $('mMsg').textContent=`Upload ${n} file(s) of the same type, then click Merge files.`;
+}
+async function mergeFiles(){
+  const out=$('mOut'),msg=$('mMsg');
+  try{await mergeFilesCore()}
+  catch(e){out.innerHTML='<div class="card"><p class="err">Merge failed: '+esc((e&&e.message)||'unknown error')+'</p></div>';msg.textContent='Merge failed. See the message below.'}
+}
+async function mergeFilesCore(){
+  const out=$('mOut'),msg=$('mMsg');
+  const inputs=Array.from(document.querySelectorAll('#mSlots input[type=file]'));
+  if(!inputs.length){msg.textContent='Create the upload boxes first.';return}
+  const files=inputs.map(i=>i.files[0]).filter(Boolean);
+  if(files.length<inputs.length){msg.textContent=`Upload all ${inputs.length} file(s) first (${files.length} selected).`;return}
+  const exts=new Set(files.map(f=>f.name.split('.').pop().toLowerCase()));
+  if(exts.size>1){msg.textContent='All files must be the same type (for example, all CSV or all Excel).';return}
+  msg.textContent='Reading files\u2026';
+  const parts=[];
+  try{for(const f of files)parts.push(await readFile(f))}
+  catch(e){msg.textContent='Could not read one of the files: '+((e&&e.message)||'error');return}
+  const allCols=[];
+  parts.forEach(p=>p.cols.forEach(c=>{if(!allCols.includes(c))allCols.push(c)}));
+  const cols=['Source file',...allCols];
+  const txt=v=>v instanceof Date?v.toISOString().slice(0,10):(v==null?'':String(v));
+  const merged=[];
+  parts.forEach(p=>p.rows.forEach(r=>{const o={'Source file':p.name};allCols.forEach(c=>o[c]=r[c]===undefined?'':r[c]);merged.push(o)}));
+  const seen=new Set();let dup=0;
+  merged.forEach(o=>{const k=allCols.map(c=>txt(o[c])).join('|');if(seen.has(k))dup++;else seen.add(k)});
+  let blank=0;const blankBy={};
+  merged.forEach(o=>allCols.forEach(c=>{if(o[c]===''||o[c]==null){blank++;blankBy[c]=(blankBy[c]||0)+1}}));
+  const common=allCols.filter(c=>parts.every(p=>p.cols.includes(c)));
+  const mismatch=allCols.filter(c=>!common.includes(c));
+  const total=merged.length;
+  const fileRows=parts.map(p=>({name:p.name,rows:p.rows.length,cols:p.cols.length,missing:allCols.filter(c=>!p.cols.includes(c))}));
+  const empties=fileRows.filter(f=>f.rows===0);
+  const small=fileRows.filter(f=>total&&f.rows>0&&f.rows/total<0.05);
+  const acts=[];
+  if(mismatch.length)acts.push(['High','Align the column names across the files before the next merge. The merged data has blanks where a column is missing.',`${fmt(mismatch.length,0)} column(s) not in every file`]);
+  if(dup)acts.push(['High','Remove the duplicate rows, or confirm they are intended, before analysing the merged data.',`${fmt(dup,0)} duplicate row(s)`]);
+  if(empties.length)acts.push(['High',`Check the export for ${empties.map(f=>f.name).join(', ')}. It contains no data rows.`,`${fmt(empties.length,0)} empty file(s)`]);
+  if(blank){const top=Object.entries(blankBy).sort((a,b)=>b[1]-a[1])[0];acts.push(['Medium',`Review the blank values. ${top[0]} has the most (${fmt(top[1],0)}).`,`${fmt(blank,0)} blank cell(s)`])}
+  if(small.length)acts.push(['Medium',`Confirm ${small.map(f=>f.name).join(', ')} is complete. It contributes very few rows.`,`${fmt(small.length,0)} file(s) under 5% of rows`]);
+  if(!acts.length)acts.push(['Low','The merged data is consistent and ready for analysis.','No issues found']);
+  const rank={High:0,Medium:1,Low:2};
+  acts.sort((x,y)=>rank[x[0]]-rank[y[0]]);
+  out.innerHTML=
+    `<div class="card"><h2>Final summary</h2><p>Merged ${fmt(total,0)} row(s) from ${fmt(files.length,0)} file(s) into ${fmt(allCols.length,0)} column(s), of which ${fmt(common.length,0)} are common to every file. There are ${fmt(dup,0)} duplicate row(s) and ${fmt(blank,0)} blank cell(s).</p>${table(['File','Rows','Columns','Columns missing vs merged'],fileRows.map(f=>[esc(f.name),fmt(f.rows,0),fmt(f.cols,0),esc(f.missing.join(', ')||'None')]))}</div>`+
+    `<div class="card"><h2>Key actionable insights</h2>${table(['Priority','Recommended action','Basis'],acts.map(a=>[a[0],esc(a[1]),esc(a[2])]))}</div>`+
+    `<div class="card"><h2>Merged data</h2><div class="controls" style="margin-bottom:10px"><button id="mDlX" class="tab">Download merged Excel</button><button id="mDlC" class="tab">Download merged CSV</button></div>${table(cols,merged.slice(0,5000).map(o=>cols.map(c=>esc(txt(o[c])))))}${merged.length>5000?`<p class="muted">Showing the first 5,000 of ${fmt(merged.length,0)} rows to keep the page responsive.</p>`:''}</div>`;
+  MERGE_RESULT={cols,merged};
+  msg.textContent=`Merged ${fmt(total,0)} row(s) from ${fmt(files.length,0)} file(s).`;
+}
+let MERGE_RESULT=null;
+async function dlMerged(kind){
+  if(!MERGE_RESULT){expMsg('Merge the files first.');return}
+  const {cols,merged}=MERGE_RESULT;
+  const ws=XLSX.utils.aoa_to_sheet([cols,...merged.map(o=>cols.map(c=>o[c]))]);
+  if(kind==='xlsx'){
+    const wbk=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wbk,ws,'Merged');
+    await saveFile(`merged-${stamp()}.xlsx`,XLSX.write(wbk,{bookType:'xlsx',type:'array'}),'Merged Excel');
+  }else{
+    await saveFile(`merged-${stamp()}.csv`,new TextEncoder().encode(XLSX.utils.sheet_to_csv(ws)),'Merged CSV');
+  }
+}
+document.addEventListener('click',e=>{
+  if(e.target.id==='mDlX')dlMerged('xlsx');
+  if(e.target.id==='mDlC')dlMerged('csv');
+});
+$('mSet').onclick=setMergeSlots;
+$('mRun').onclick=mergeFiles;
+
+let LAST_DOC=null;
+async function viewDoc(file){
+  LAST_DOC=file||LAST_DOC;
+  const out=$('docOut');
+  if(!file)return;
+  out.innerHTML=`<div class="card"><p class="muted">Opening ${esc(file.name)}\u2026</p></div>`;
+  try{
+    const buf=await file.arrayBuffer();
+    if(/\.docx$/i.test(file.name)){
+      if(!window.mammoth)throw new Error('The Word viewer did not load. Check your connection and reload.');
+      const r=await window.mammoth.convertToHtml({arrayBuffer:buf});
+      out.innerHTML=`<div class="card"><h2>${esc(file.name)}</h2><div class="docbody">${r.value}</div>${r.messages.length?`<p class="muted">${fmt(r.messages.length,0)} conversion note(s): images and some formatting may not be shown.</p>`:''}</div>`;
+    }else if(/\.pdf$/i.test(file.name)){
+      if(!window.pdfjsLib)throw new Error('The PDF viewer did not load. Check your connection and reload.');
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const pdf=await window.pdfjsLib.getDocument({data:buf}).promise;
+      out.innerHTML=`<div class="card"><h2>${esc(file.name)}</h2><p class="muted">${fmt(pdf.numPages,0)} page(s)</p><div id="pdfPages" style="display:grid;gap:14px;justify-items:center"></div></div>`;
+      const host=$('pdfPages');
+      for(let i=1;i<=pdf.numPages;i++){
+        const page=await pdf.getPage(i);
+        const base=page.getViewport({scale:1});
+        const vp=page.getViewport({scale:Math.min(1.6,900/base.width)});
+        const c=document.createElement('canvas');
+        c.width=vp.width;c.height=vp.height;c.style.maxWidth='100%';c.style.boxShadow='0 8px 20px -10px rgba(0,0,0,.4)';
+        host.appendChild(c);
+        await page.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
+      }
+    }else if(/\.(xlsx|xls|csv)$/i.test(file.name)){
+      const wbk=await readWorkbook(file);
+      out.innerHTML=`<div class="card"><h2>${esc(file.name)}</h2><div id="xlTabs" class="controls" style="margin-bottom:12px">${wbk.SheetNames.map(n=>`<button class="tab" data-sheet="${esc(n)}">${esc(n)}</button>`).join('')}</div><div id="xlBody"></div></div>`;
+      showSheet(wbk,wbk.SheetNames[0]);
+    }else throw new Error('Only .docx, .pdf, .xlsx, .xls and .csv files can be viewed here.');
+  }catch(e){
+    out.innerHTML=`<div class="card"><p class="err">${esc((e&&e.message)||'This file could not be opened.')}</p></div>`;
+  }
+}
+async function docText(file){
+  if(/\.(xlsx|xls|csv)$/i.test(file.name)){
+    const wbk=await readWorkbook(file);
+    return wbk.SheetNames.map(n=>`Sheet: ${n}\n`+XLSX.utils.sheet_to_csv(wbk.Sheets[n])).join('\n');
+  }
+  const buf=await file.arrayBuffer();
+  if(/\.docx$/i.test(file.name)){
+    const r=await window.mammoth.extractRawText({arrayBuffer:buf});
+    return r.value;
+  }
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const pdf=await window.pdfjsLib.getDocument({data:buf}).promise;
+  let t='';
+  for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i);const c=await pg.getTextContent();t+=c.items.map(x=>x.str).join(' ')+'\n'}
+  return t;
+}
+async function genTests(){
+  const msg=$('genMsg'),out=$('genOut');
+  if(!LAST_DOC){msg.textContent='Open a Word or PDF file first.';return}
+  const sample=window.claude&&window.claude.use?await window.claude.use('sample'):null;
+  if(!sample){msg.textContent='Test case generation is not available in this view.';return}
+  msg.textContent='Reading the document\u2026';
+  let text='';
+  try{text=(await docText(LAST_DOC)).trim()}catch(e){msg.textContent='Could not read the document text.';return}
+  if(!text){msg.textContent='No readable text found. Scanned PDFs need OCR first.';return}
+  const prompt=`You are a QA lead. Read the document below and write test cases that cover its requirements, rules, and workflows.\nReturn ONLY a JSON array, with no preamble and no markdown. Each item must have: "id" (TC-001 style), "module" (section or feature name), "title", "preconditions" (string), "steps" (array of strings), "expected" (string), "priority" ("High", "Medium" or "Low"), and "type" ("Functional", "Negative", "Boundary" or "Data").\nCover normal flows, negative cases, and boundary values stated or clearly implied by the document. Do not invent requirements the document does not contain.\n\nDOCUMENT:\n${text.slice(0,60000)}`;
+  msg.textContent='Generating test cases\u2026';
+  try{
+    const res=await sample(prompt);
+    const raw=((res&&res.text)||'').replace(/```json|```/g,'');
+    const list=JSON.parse(raw.slice(raw.indexOf('['),raw.lastIndexOf(']')+1));
+    if(!Array.isArray(list)||!list.length)throw new Error('empty');
+    const body=list.map(t=>[esc(t.id||''),esc(t.module||''),esc(t.title||''),esc((t.steps||[]).join(' \u2192 ')),esc(t.expected||''),esc(t.priority||''),esc(t.type||'')]);
+    out.innerHTML=`<div class="card"><h2>Generated test cases (${fmt(list.length,0)})</h2>${table(['ID','Module','Title','Steps','Expected result','Priority','Type'],body)}</div>`;
+    msg.textContent=`${fmt(list.length,0)} test case(s) generated from ${LAST_DOC.name}. Review them before use.`;
+  }catch(e){
+    const c=e&&e.code;
+    msg.textContent=c==='rate_limited'?'Please wait a moment, then try again.':c==='not_granted'?'Permission to use Claude was not granted for this page.':'Test cases could not be generated. Try a shorter document.';
+  }
+}
+async function sumDoc(){
+  const msg=$('genMsg'),out=$('sumOut');
+  if(!LAST_DOC){msg.textContent='Open a Word or PDF file first.';return}
+  const sample=window.claude&&window.claude.use?await window.claude.use('sample'):null;
+  if(!sample){msg.textContent='Summaries are not available in this view.';return}
+  msg.textContent='Reading the document\u2026';
+  let text='';
+  try{text=(await docText(LAST_DOC)).trim()}catch(e){msg.textContent='Could not read the document text.';return}
+  if(!text){msg.textContent='No readable text found. Scanned PDFs need OCR first.';return}
+  const prompt=`Summarise the document below. Return ONLY a JSON object with these keys, with no preamble and no markdown:\n"summary": a 3 to 5 sentence overview.\n"keyInsights": an array of 5 to 8 short strings, each stating a specific finding, rule, figure, or decision from the document.\n"followUps": an array of up to 5 short items the reader should consider next.\nBase everything on the document only. Do not add information it does not contain.\n\nDOCUMENT:\n${text.slice(0,60000)}`;
+  msg.textContent='Writing the summary\u2026';
+  try{
+    const res=await sample(prompt);
+    const raw=((res&&res.text)||'').replace(/```json|```/g,'');
+    const d=JSON.parse(raw.slice(raw.indexOf('{'),raw.lastIndexOf('}')+1));
+    const list=a=>Array.isArray(a)&&a.length?`<ul style="margin:0;padding-left:20px;line-height:1.6">${a.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<p class="muted">None.</p>';
+    out.innerHTML=
+      `<div class="card"><h2>Summary</h2><p>${esc(d.summary||'No summary was returned.')}</p></div>`+
+      `<div class="card"><h2>Key insights</h2>${list(d.keyInsights)}</div>`+
+      `<div class="card"><h2>Suggested follow-ups</h2>${list(d.followUps)}</div>`;
+    msg.textContent=`Summary of ${LAST_DOC.name} ready. Check it against the document before sharing.`;
+  }catch(e){
+    const c=e&&e.code;
+    msg.textContent=c==='rate_limited'?'Please wait a moment, then try again.':c==='not_granted'?'Permission to use Claude was not granted for this page.':'The summary could not be created. Try a shorter document.';
+  }
+}
+$('sumBtn').onclick=sumDoc;
+$('genBtn').onclick=genTests;
+let DOC_ZOOM=1;
+function setZoom(z){
+  DOC_ZOOM=Math.min(3,Math.max(0.5,Math.round(z*100)/100));
+  document.querySelectorAll('#docOut .docbody, #docOut #pdfPages').forEach(el=>el.style.zoom=DOC_ZOOM);
+  $('zoomLbl').textContent=Math.round(DOC_ZOOM*100)+'%';
+}
+$('zIn').onclick=()=>setZoom(DOC_ZOOM+0.1);
+$('zOut').onclick=()=>setZoom(DOC_ZOOM-0.1);
+$('zReset').onclick=()=>setZoom(1);
+$('docFile').onchange=e=>{viewDoc(e.target.files[0]).then(()=>setZoom(DOC_ZOOM))};
 
 const T=[null,null,null];
 const NM=['A','B','C'];
@@ -838,7 +1527,7 @@ function matchRun(){
   const empTable=rowsT.length
     ?table([E,'Missing','Missing '+I+(Dt?' (date)':''),'Date differs','Extra in '+B.name,'Value diffs'],rowsT.slice(0,200).map(([e,v])=>[esc(e),v.miss.length,v.miss.map(x=>esc(x.item)+(Dt&&x.date?' ('+esc(x.date)+')':'')).join('; ')||'–',v.dd.length,v.extra.length,v.vd]))
     :'<p class="muted">No differences found.</p>';
-  const vdTable=vd.length?table(['Entity','Item','Date','Column','File A','File B'],vd.slice(0,50).map(x=>[esc(x.ent),esc(x.item),esc(x.date),esc(x.col),fmtv(x.x),fmtv(x.y)])):'<p class="muted">No value differences on matched records.</p>';
+  const vdTable=vd.length?table(['Entity','Item','Date','Column','File A','File B'],vd.slice(0,50).map(x=>[esc(x.ent),esc(x.item),esc(x.date),esc(x.col),`<mark class="ycell">${fmtv(x.x)}</mark>`,`<mark class="ycell">${fmtv(x.y)}</mark>`])):'<p class="muted">No value differences on matched records.</p>';
 
   $('mOut').innerHTML=
     `<div class="card"><h2>Key insights</h2>${insHtml}</div>`+
@@ -945,12 +1634,12 @@ function compare(){
   const rep=buildReport(A,B,key,pairs,diffs,colChanged,unA,unB,onlyA,onlyB,common);
   requestAnimationFrame(()=>{drawReport(rep);drawSize(A,B)});
   const totals=numCommon.length?`<div class="card"><h2>Numeric totals</h2><div class="wrap">${table(['Column','Total A','Total B','Change','Change %'],numCommon.map(c=>{const a=sumOf(A,c),b=sumOf(B,c),p=pct(a,b);return[esc(c),fmt(a),fmt(b),fmt(b-a),isFinite(p)?fmt(p,1)+'%':'–']}))}</div></div>`:'';
-  const cellTable=diffs.length?table(['Match','Column','File A','File B'],diffs.slice(0,50).map(d=>[esc(d.k),esc(d.c),fmtv(d.x),fmtv(d.y)])):'<p class="muted">No differing cells.</p>';
+  const cellTable=diffs.length?table(['Match','Column','File A','File B'],diffs.slice(0,50).map(d=>[esc(d.k),esc(d.c),`<mark class="ycell">${fmtv(d.x)}</mark>`,`<mark class="ycell">${fmtv(d.y)}</mark>`])):'<p class="muted">No differing cells.</p>';
 
   $('cmpOut').innerHTML=
-    sizeCard(A,B)+rep.html+variationInsights(A,B,key,pairs,diffs,colChanged,unA,unB,common)+variationHeatmap(key,pairs,diffs,common)+sev+`<div class="card"><h2>Key differences</h2><ul style="margin:0;padding-left:20px;line-height:1.6">${out.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>`+
+    sizeCard(A,B)+exactLabelCheck(A,B)+rep.html+variationInsights(A,B,key,pairs,diffs,colChanged,unA,unB,common)+variationHeatmap(key,pairs,diffs,common)+actionPlan(A,B,key,pairs,diffs,colChanged,unA,unB,onlyA,onlyB,common)+sev+`<div class="card"><h2>Key differences</h2><ul style="margin:0;padding-left:20px;line-height:1.6">${out.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>`+
     totals+
     `<div class="card"><h2>Cell-level differences${diffs.length>50?' (top 50 of '+fmt(diffs.length,0)+', largest first)':''}</h2><div class="wrap">${cellTable}</div></div>`+
     `<div class="grid2"><div class="card"><h2>Only in A</h2><p class="muted">${unA.slice(0,50).map(esc).join(', ')||'None'}</p></div><div class="card"><h2>Only in B</h2><p class="muted">${unB.slice(0,50).map(esc).join(', ')||'None'}</p></div></div>`;
 }
-</script></body></html>
+</script><div class="dev noprint">Developed by: Prashant</div></body></html>

@@ -113,7 +113,11 @@ header{padding-left:96px}
 .st thead th:nth-child(6n+4){color:#8e44ad}
 .st thead th:nth-child(6n+5){color:#c0392b}
 .st thead th:nth-child(6n+6){color:#16a085}
-</style></head><body>
+#gate{position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1f4e78,#2e86c1 55%,#5dade2)}
+#gate .gbox{background:var(--card);color:var(--ink);padding:28px;border-radius:18px;width:min(360px,90vw);text-align:center;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+#gate input{width:100%;margin:12px 0;padding:10px;font-size:16px;text-align:center;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+#gate .gerr{color:#c0392b;min-height:18px;font-size:13px;margin-top:8px}
+</style></head><body><div id="gate"><div class="gbox"><h2>Secure access</h2><p class="muted">Enter the access password to continue.</p><input id="gPw" type="password" placeholder="Password" autocomplete="off"><button id="gGo" class="tab">Unlock</button><div id="gErr" class="gerr"></div></div></div>
 <header><img id="clientLogo" alt="Client logo" hidden><div class="mag" aria-hidden="true"><div class="lens"><i class="doc"></i></div><span class="handle"></span></div><h1>Workday Integration Analyzer - <mark class="wia">WIA</mark></h1><p>Upload a spreadsheet or CSV. Analysis runs in your browser; your file is not uploaded anywhere.</p><div class="clock hclock"><select id="tzSel" aria-label="Time zone"></select><span id="clockTxt"></span></div></header>
 <nav class="tabs"><button id="tC" class="tab">Compare two files</button><button id="tM" class="tab">Match by fields</button><button id="tD" class="tab">View data</button><button id="tT" class="tab">Three Files Comparison</button><button id="tX" class="tab" hidden>Admin</button><button id="tK" class="tab">Combined trend</button><button id="tA" class="tab on">Analyze</button><button id="tY" class="tab">Data analysis</button><button id="tV" class="tab">Documents</button><button id="tG" class="tab">Merge</button></nav>
 <div class="exp noprint"><button id="exL" class="tab">Export Excel</button><button id="exP" class="tab">Export PDF</button><span id="expMsg" class="muted"></span></div>
@@ -720,6 +724,7 @@ function dataSources(){
   if(D.A)list.push({id:'cA',label:'Compare A: '+D.A.name,rows:D.A.rows,cols:D.A.cols,size:D.A.size});
   if(D.B)list.push({id:'cB',label:'Compare B: '+D.B.name,rows:D.B.rows,cols:D.B.cols,size:D.B.size});
   T.forEach((t,i)=>{if(t)list.push({id:'t'+i,label:`Three ${NM[i]}: ${t.name}`,rows:t.rows,cols:t.cols,size:t.size})});
+  if(typeof MERGE_RESULT!=='undefined'&&MERGE_RESULT)list.push({id:'mg',label:'Merged files',rows:MERGE_RESULT.merged,cols:MERGE_RESULT.cols,size:null});
   return list;
 }
 
@@ -1131,6 +1136,15 @@ $('logoSave').onclick=saveLogo;
 $('logoRemove').onclick=removeLogo;
 initLogo();
 showTab('C');
+function tryGate(){
+  if($('gPw').value==='WIA'){$('gate').remove();return}
+  $('gErr').textContent='Incorrect password. Please try again.';
+  $('gPw').value='';
+  $('gPw').focus();
+}
+$('gGo').onclick=tryGate;
+$('gPw').onkeydown=e=>{if(e.key==='Enter')tryGate()};
+$('gPw').focus();
 
 const TZ=[['Local time',''],['UTC','UTC'],['India (IST)','Asia/Kolkata'],['New York (ET)','America/New_York'],['Los Angeles (PT)','America/Los_Angeles'],['London (GMT/BST)','Europe/London'],['Paris (CET)','Europe/Paris'],['Dubai (GST)','Asia/Dubai'],['Singapore (SGT)','Asia/Singapore'],['Tokyo (JST)','Asia/Tokyo'],['Sydney (AEST)','Australia/Sydney']];
 $('tzSel').innerHTML=TZ.map(([l,z])=>`<option value="${z}">${esc(l)}</option>`).join('');
